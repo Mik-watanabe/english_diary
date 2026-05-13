@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Correction } from "../types";
 import Loading from "../loading";
-import DiaryEditor from "./components/DiaryEditor";
+import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CreateDiaryPage = () => {
