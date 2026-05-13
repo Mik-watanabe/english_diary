@@ -13,7 +13,7 @@ const reviseDiarySchema = {
   name: "reviseDiary",
   schema: {
     type: "object",
-    properties: {
+properties: {
       original: {
         type: "string",
         description: "The original diary entry.",

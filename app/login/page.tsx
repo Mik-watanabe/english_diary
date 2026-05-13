@@ -1,10 +1,12 @@
-import React from 'react'
-import LoginForm from '../ui/login-form'
+import { Suspense } from "react";
+import LoginForm from "../ui/login-form";
 
 const loginPage = () => {
   return (
-    <LoginForm />
-  )
-}
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+};
 
-export default loginPage
+export default loginPage;

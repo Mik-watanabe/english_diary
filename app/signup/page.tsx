@@ -1,10 +1,12 @@
-import React from 'react'
-import SignUpForm from '../ui/signup-form';
+import React, { Suspense } from "react";
+import SignUpForm from "../ui/signup-form";
 
 const SignupPage = () => {
   return (
-    <SignUpForm />
-  )
-}
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
+  );
+};
 
-export default SignupPage
+export default SignupPage;
