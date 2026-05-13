@@ -50,6 +50,14 @@ export async function signup(initialState: any, formData: FormData) {
     },
   });
 
+  if (error) {
+    return {
+        success: false,
+        errors: {},
+        message: "Failed to create account. Please try again.",
+    }
+  } 
+
   if (data.user && data.user.identities?.length === 0) {
     return {
       success: false,

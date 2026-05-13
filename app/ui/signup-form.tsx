@@ -60,7 +60,7 @@ export default function SignUpForm() {
                       name="lastName"
                       required
                     />
-                    {state.errors?.xlastName && (
+                    {state.errors?.lastName && (
                       <p className="text-sm text-red-500">
                         {state.errors.lastName[0]}
                       </p>
