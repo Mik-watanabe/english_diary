@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import moment from "moment";
 import { highlightDiff } from "@/lib/diaryHighlight";
 import {
@@ -11,25 +11,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import SaveDialog from "@/app/ui/diary/save-diary-dialog";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { RevisedDiaryResponse } from "@/types/diary";
+
 const CreateDiaryPage = () => {
   const [revisedDiaryValue, setRevisedDiaryValue] = useState<React.ReactNode[]>(
     [],
   );
   const [loading, setLoading] = useState(false);
-  const [revisedDiaryResponse, setRevisedDiaryResponse] = useState<RevisedDiaryResponse | null>(null);
+  const [revisedDiaryResponse, setRevisedDiaryResponse] =
+    useState<RevisedDiaryResponse | null>(null);
   const [corrections, setCorrections] = useState<Correction[]>([]);
   const searchParams = useSearchParams();
   const [alternative, setAlternative] = useState<string>("");
 
-  const date = moment(searchParams.get("date")).format("MMM DD, YYYY");
+  const rawDate = searchParams.get("date");
+
+  if (!rawDate || !moment(rawDate, "YYYY-MM-DD", true).isValid()) {
+    notFound();
+  }
+
+const date = moment(rawDate).format("MMM DD, YYYY");
+
   const handleRevise = async (diaryValue: string) => {
     if (!diaryValue.trim()) return;
 
@@ -51,7 +58,7 @@ const CreateDiaryPage = () => {
       }
 
       const data: RevisedDiaryResponse = await response.json();
-      
+
       setCorrections(data.corrections);
       const highlighted = highlightDiff(data.original, data.revised);
       setAlternative(data.alternative);
@@ -105,10 +112,7 @@ const CreateDiaryPage = () => {
         </div>
       </div>
 
-      <SaveDialog
-        date={date}
-        revisedDiaryResponse={revisedDiaryResponse}
-      />
+      <SaveDialog date={date} revisedDiaryResponse={revisedDiaryResponse} />
 
       {revisedDiaryValue.length > 0 && (
         <>

@@ -39,7 +39,6 @@ export default async function saveDiary(initialState: any, formData: FormData) {
     alternative_content: formData.get("alternative_content"),
   });
 
-  console.log(validatedFields);
   if (!validatedFields.success) {
     return {
       success: false,

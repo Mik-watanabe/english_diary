@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,28 +43,46 @@ export default function SaveDiaryDialog({
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
-      toast.success(state.message, { position: "top-center" });
+      toast.success(state.message, { position: "top-center",
+        style: {
+          "--normal-text":
+            "light-dark(var(--color-green-600), var(--color-green-400))",
+          "--normal-border":
+            "light-dark(var(--color-green-600), var(--color-green-400))",
+        } as React.CSSProperties,
+      });
       setOpen(false);
       setTitle("");
       // redirect to diary detail page
       return;
     }
-    toast.error(state.message, { position: "top-center" });
+    toast.error(state.message, { position: "top-center",
+      style: {
+      "--normal-text":
+        "light-dark(var(--color-red-600), var(--color-red-400))",
+      "--normal-border":
+        "light-dark(var(--color-red-600), var(--color-red-400))",
+    } as React.CSSProperties, });
     setOpen(false);
     setTitle("");
     return;
   }, [state]);
-
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && setTitle("")}>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+        if (!nextOpen) {
+          setTitle("");
+        }
+      }}
+    >
       <DialogTrigger
         render={
           <Button
             onClick={() => setOpen(true)}
             className={
-              !revisedDiaryResponse
-                ? "cursor-not-allowed bg-gray-400"
-                : ""
+              !revisedDiaryResponse ? "cursor-not-allowed bg-gray-400" : ""
             }
             disabled={!revisedDiaryResponse}
           >
@@ -111,7 +130,11 @@ export default function SaveDiaryDialog({
           <DialogFooter>
             <DialogClose
               render={
-                <Button variant="outline" disabled={isPending} onClick={() => setOpen(false)}>
+                <Button
+                  variant="outline"
+                  disabled={isPending}
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </Button>
               }
