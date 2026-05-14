@@ -35,6 +35,7 @@ const DiaryEditor = ({
   return (
     <div className="border-t border-r border-gray-300 p-2 rounded-none">
       <textarea
+        readOnly={loading}
         name="diary"
         id="diary"
         placeholder="Write about your day in english, what you did, how you felt etc 💭"

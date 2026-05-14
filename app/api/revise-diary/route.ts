@@ -9,11 +9,11 @@ const openaiClient = new openai({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const reviseDiarySchema = {
+const reviseDiaryResponseSchema = {
   name: "reviseDiary",
   schema: {
     type: "object",
-properties: {
+    properties: {
       original: {
         type: "string",
         description: "The original diary entry.",
@@ -42,9 +42,9 @@ properties: {
           additionalProperties: false,
         },
       },
-      alternatives: { type: "string" },
+      alternative: { type: "string" },
     },
-    required: ["original", "revised", "corrections", "alternatives"],
+    required: ["original", "revised", "corrections", "alternative"],
     additionalProperties: false,
   },
   strict: true,
@@ -52,53 +52,62 @@ properties: {
 
 export async function POST(request: Request) {
   try {
-    const { originalDiary } = await request.json();
+    // const { originalDiary } = await request.json();
 
-    if (!originalDiary || typeof originalDiary !== "string") {
-      return NextResponse.json(
-        { error: "Empty input is not allowed" },
-        { status: 400 },
-      );
-    }
+    // if (!originalDiary || typeof originalDiary !== "string") {
+    //   return NextResponse.json(
+    //     { error: "Empty input is not allowed" },
+    //     { status: 400 },
+    //   );
+    // }
 
-    if (originalDiary.length > 2000) {
-      return NextResponse.json(
-        { error: "Input is too long. Please keep it under 2000 characters." },
-        { status: 400 },
-      );
-    }
+    // if (originalDiary.length > 2000) {
+    //   return NextResponse.json(
+    //     { error: "Input is too long. Please keep it under 2000 characters." },
+    //     { status: 400 },
+    //   );
+    // }
 
-    const response = await openaiClient.responses.create({
-        model: "gpt-4.1",
-        temperature: 0.3,
-        store: false,
-        input: [
-            {
-                role: "developer",
-                content: DIARY_DEVELOPER_PROMPT
-            },
-            {
-                role: "system",
-                content: DIARY_SYSTEM_PROMPT
-            },
-            {
-                role: "user",
-                content: originalDiary
-            }
-        ],
-        text: {
-            format: {
-                type: "json_schema",
-                ...reviseDiarySchema,
-            },
+    // const response = await openaiClient.responses.create({
+    //     model: "gpt-4.1",
+    //     temperature: 0.3,
+    //     store: false,
+    //     input: [
+    //         {
+    //             role: "developer",
+    //             content: DIARY_DEVELOPER_PROMPT
+    //         },
+    //         {
+    //             role: "system",
+    //             content: DIARY_SYSTEM_PROMPT
+    //         },
+    //         {
+    //             role: "user",
+    //             content: originalDiary
+    //         }
+    //     ],
+    //     text: {
+    //         format: {
+    //             type: "json_schema",
+    //             ...reviseDiaryResponseSchema,
+    //         },
+    //     },
+    // });
+
+    // const result = JSON.parse(response.output_text);
+
+    return NextResponse.json({
+      original: "I played basketball and it was excited",
+      revised: "I played basketball and it was exciting",
+      corrections: [
+        {
+          original: "it was excited",
+          revised: "it was exciting",
+          why: "'Excited' describes a person, 'exciting' describes an experience",
         },
+      ],
+      alternative: "I played basketball and it was a lot of fun",
     });
-
-    const result = JSON.parse(response.output_text);
-
-
-    return NextResponse.json(result);
-
   } catch (error) {
     console.error("Diary revision failed: ", error);
 

@@ -11,41 +11,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { Correction } from "../types";
-import Loading from "../loading";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { toast } from "sonner";
+import SaveDialog from "@/app/ui/diary/save-diary-dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
+import { RevisedDiaryResponse } from "@/types/diary";
 const CreateDiaryPage = () => {
   const [revisedDiaryValue, setRevisedDiaryValue] = useState<React.ReactNode[]>(
     [],
   );
   const [loading, setLoading] = useState(false);
+  const [revisedDiaryResponse, setRevisedDiaryResponse] = useState<RevisedDiaryResponse | null>(null);
   const [corrections, setCorrections] = useState<Correction[]>([]);
   const searchParams = useSearchParams();
-  const [alternatives, setAlternatives] = useState<string>("");
-  const date = moment(searchParams.get("date")).format("MMM Do, YYYY");
+  const [alternative, setAlternative] = useState<string>("");
+
+  const date = moment(searchParams.get("date")).format("MMM DD, YYYY");
   const handleRevise = async (diaryValue: string) => {
-    setLoading(true);
-    console.log("Revise with AI", diaryValue);
-    if (diaryValue == "") return;
+    if (!diaryValue.trim()) return;
 
-    // const response = await fetch("/api/revise-diary", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     originalDiary: diaryValue,
-    //   }),
-    // });
-    // const data = await response.json();
-    // console.log(data);
-    // setCorrections(data.corrections);
-    // const highlighted = highlightDiff(data.original, data.revised);
-    // setAlternatives(data.alternatives);
+    try {
+      setLoading(true);
 
-    // setRevisedDiaryValue(highlighted);
+      const response = await fetch("/api/revise-diary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          originalDiary: diaryValue,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to revise diary");
+      }
+
+      const data: RevisedDiaryResponse = await response.json();
+      
+      setCorrections(data.corrections);
+      const highlighted = highlightDiff(data.original, data.revised);
+      setAlternative(data.alternative);
+
+      setRevisedDiaryValue(highlighted);
+      setRevisedDiaryResponse(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to revise diary. Please try again.", {
+        position: "top-center",
+        style: {
+          "--normal-text":
+            "light-dark(var(--color-red-600), var(--color-red-400))",
+          "--normal-border":
+            "light-dark(var(--color-red-600), var(--color-red-400))",
+        } as React.CSSProperties,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,15 +89,14 @@ const CreateDiaryPage = () => {
             Revised Diary by AI assistant
           </h2>
           <div className="border-t border-gray-300 p-2 rounded-none">
-            {loading && (
+            {loading ? (
               <div className="space-y-3 p-3 animate-pulse">
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-5/6" />
                 <Skeleton className="h-4 w-2/3" />
               </div>
-            )}
-            {!loading && (
+            ) : (
               <div className="p-3 whitespace-pre-wrap">
                 {revisedDiaryValue || ""}
               </div>
@@ -80,7 +105,12 @@ const CreateDiaryPage = () => {
         </div>
       </div>
 
-      {revisedDiaryValue && (
+      <SaveDialog
+        date={date}
+        revisedDiaryResponse={revisedDiaryResponse}
+      />
+
+      {revisedDiaryValue.length > 0 && (
         <>
           <Table>
             <TableHeader>
@@ -102,7 +132,7 @@ const CreateDiaryPage = () => {
           </Table>
           <div>
             <h2 className="font-semibold text-left">Alternatives</h2>
-            <div className="px-3 whitespace-pre-wrap">{alternatives}</div>
+            <div className="px-3 whitespace-pre-wrap">{alternative}</div>
           </div>
         </>
       )}
