@@ -136,7 +136,7 @@ const date = moment(rawDate).format("MMM DD, YYYY");
           </Table>
           <div>
             <h2 className="font-semibold text-left">Alternatives</h2>
-            <div className="px-3 whitespace-pre-wrap">{alternative}</div>
+            <div className="whitespace-pre-wrap">{alternative}</div>
           </div>
         </>
       )}

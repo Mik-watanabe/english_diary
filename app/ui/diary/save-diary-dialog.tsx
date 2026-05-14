@@ -15,8 +15,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { RevisedDiaryResponse } from "@/types/diary";
 
 import { useActionState } from "react";
-import saveDiary from "@/app/actions/save-diary-action";
+import saveDiary from "@/app/actions/diary/save-action";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import moment from "moment";
 
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
@@ -53,7 +55,7 @@ export default function SaveDiaryDialog({
       });
       setOpen(false);
       setTitle("");
-      // redirect to diary detail page
+      redirect(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       return;
     }
     toast.error(state.message, { position: "top-center",
