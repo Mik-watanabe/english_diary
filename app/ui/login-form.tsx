@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { login } from "@/app/login/action";
+import { login } from "@/app/actions/login-action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

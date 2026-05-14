@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import Link from "next/link";
 import { useActionState } from "react";
-import { signup } from "../signup/action";
+import { signup } from "@/app/actions/signup-action";
 
 const initialState = {
   success: false,
