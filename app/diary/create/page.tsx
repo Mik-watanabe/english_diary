@@ -14,9 +14,9 @@ import {
 import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
 import SaveDialog from "@/app/ui/diary/save-diary-dialog";
 import { RevisedDiaryResponse } from "@/types/diary";
+import { showErrorToast } from "@/lib/show-toast";
 
 const CreateDiaryPage = () => {
   const [revisedDiaryValue, setRevisedDiaryValue] = useState<React.ReactNode[]>(
@@ -67,15 +67,7 @@ const date = moment(rawDate).format("MMM DD, YYYY");
       setRevisedDiaryResponse(data);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to revise diary. Please try again.", {
-        position: "top-center",
-        style: {
-          "--normal-text":
-            "light-dark(var(--color-red-600), var(--color-red-400))",
-          "--normal-border":
-            "light-dark(var(--color-red-600), var(--color-red-400))",
-        } as React.CSSProperties,
-      });
+      showErrorToast("Failed to revise diary. Please try again.");
     } finally {
       setLoading(false);
     }
