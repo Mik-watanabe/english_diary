@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TextSpeechButton from "@/app/ui/diary/text-speech-button";
 
 const logGetUserDiarySuccess = (diaryData: DiaryData) => {
   console.log("[getUserDiary]", diaryData);
@@ -43,7 +44,6 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     date: diaryDate,
     title,
   } = result.diaryData;
-  console.log(original, revised, corrections, alternative, diaryDate, title);
 
   const rivisedWithHighlight = highlightDiff(original, revised);
 
@@ -72,11 +72,10 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <div>
           <h2 className="font-semibold text-center p-2">
             Revised Diary by AI assistant
+            <TextSpeechButton revisedText={revised} />
           </h2>
           <div className="border-t border-gray-300 p-2 rounded-none">
-            <div className="whitespace-pre-wrap">
-              {rivisedWithHighlight}
-            </div>
+            <div className="whitespace-pre-wrap">{rivisedWithHighlight}</div>
           </div>
         </div>
       </div>
