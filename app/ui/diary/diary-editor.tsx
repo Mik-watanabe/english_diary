@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useState, useEffect } from "react";
 import { MessageCircleWarning } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner"
+import { Sparkle } from "lucide-react";
 
 const DiaryEditor = ({
   handleRevise,
@@ -33,14 +34,14 @@ const DiaryEditor = ({
   };
 
   return (
-    <div className="border-t border-r border-gray-300 p-2 rounded-none">
+    <div className="">
       <textarea
         readOnly={loading}
         name="diary"
         id="diary"
         placeholder="Write about your day in english, what you did, how you felt etc 💭"
         rows={10}
-        className="border-none w-full focus-within:outline-none"
+        className="border border-gray-300 p-2 rounded-xl w-full focus-within:outline-none"
         onChange={(e) => handleDiaryChange(e.target.value)}
         value={diaryValue}
       ></textarea>
@@ -54,15 +55,19 @@ const DiaryEditor = ({
         <button
           disabled={isButtonDisabled}
           className={clsx(
-            "py-1 px-2 rounded-md ml-auto flex items-center",
+            "mt-2 ml-auto flex w-full items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition-colors",
             isButtonDisabled
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-green-300 hover:bg-green-400  hover:cursor-pointer",
+              ? "cursor-not-allowed border-[#E5EDF8] bg-slate-50 text-slate-400"
+              : "border-blue-500 bg-blue-500 text-white shadow-sm hover:bg-blue-600 hover:border-blue-600 hover:cursor-pointer",
           )}
           onClick={onHandleRevise}
         >
-          {loading ? <Spinner data-icon="inline-start" className="inline-block mr-2" /> : <></>}
-          Revise with AI
+          {loading ? (
+            <Spinner data-icon="inline-start" className="inline-block" />
+          ) : (
+            <Sparkle className="size-4 text-white" />
+          )}
+          AI review & Correct
         </button>
       </div>
     </div>
