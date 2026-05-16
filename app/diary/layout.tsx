@@ -1,8 +1,16 @@
-import { Toaster } from "sonner";
-export default function DiaryLayout({
-    children,
-  }: {
-    children: React.ReactNode
-  }) {
-    return <main className="max-w-7xl mx-auto w-full p-4"><Toaster />{children}</main>
-  }
+import { UserProvider } from "@/components/providers/UserProvider";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return <UserProvider initialUser={user}>{children}</UserProvider>;
+}
