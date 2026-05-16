@@ -30,9 +30,7 @@ export type GetUserDiaryErrorCode =
 export type GetUserDiaryResult =
   | {
       success: true;
-      diaryData: Record<string, unknown> & {
-        corrections: Record<string, unknown>[];
-      };
+      diaryData: DiaryData;
     }
   | {
       success: false;

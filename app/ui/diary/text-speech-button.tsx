@@ -15,7 +15,6 @@ export default function TextSpeechButton({
 
   // const [textToSpeech, setTextToSpeech] = useState<string>("");
   const handleTextToSpeech = async (text: string) => {
-    console.log("play audio", text);
 
     try {
       setLoading(true);
@@ -29,6 +28,7 @@ export default function TextSpeechButton({
   return (
     // TODO: Add stop / resume functionality
     <Button
+        aria-label="Play speech"
       disabled={loading}
       variant="outline"
       size="icon"

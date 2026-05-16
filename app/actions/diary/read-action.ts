@@ -81,9 +81,6 @@ export async function getUserDiary(date: string): Promise<GetUserDiaryResult> {
     why: correction.reason,
   })) || [];
 
-  console.log(correctionsData);
-  console.log(rowDiaryData[0]);
-
   return {
     success: true,
     diaryData: {

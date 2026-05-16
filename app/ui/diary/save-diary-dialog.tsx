@@ -18,7 +18,7 @@ import { useActionState } from "react";
 import saveDiary from "@/app/actions/diary/save-action";
 import moment from "moment";
 import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
-import { router } from "next/dist/client";
+import { useRouter } from "next/navigation";
 
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
@@ -35,6 +35,7 @@ export default function SaveDiaryDialog({
   revisedDiaryResponse,
   date,
 }: SaveDiaryDialogProps) {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [state, formAction, isPending] = useActionState(
     saveDiary,

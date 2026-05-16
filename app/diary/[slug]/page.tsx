@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/table";
 import TextSpeechButton from "@/app/ui/diary/text-speech-button";
 
-const logGetUserDiarySuccess = (diaryData: DiaryData) => {
-  console.log("[getUserDiary]", diaryData);
+const logGetUserDiaryFailure = (code: GetUserDiaryErrorCode, message: string) => {
+  console.log("[getUserDiary]", code, message);
 };
 
 const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
@@ -45,7 +45,7 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     title,
   } = result.diaryData;
 
-  const rivisedWithHighlight = highlightDiff(original, revised);
+  const revisedWithHighlight = highlightDiff(original, revised);
 
   return (
     <div data-diary-id={String(result.diaryData.id ?? "")}>
@@ -75,7 +75,7 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <TextSpeechButton revisedText={revised} />
           </h2>
           <div className="border-t border-gray-300 p-2 rounded-none">
-            <div className="whitespace-pre-wrap">{rivisedWithHighlight}</div>
+            <div className="whitespace-pre-wrap">{revisedWithHighlight}</div>
           </div>
         </div>
       </div>

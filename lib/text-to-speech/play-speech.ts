@@ -1,11 +1,8 @@
 import { createKey } from "./create-key";
 import { getSpeechBlob, setSpeechBlob } from "./db";
 
-const VOICE = "alloy";
-const MODEL = "gpt-4o-mini-tts";
-
 export async function playSpeech(text: string) {
-  const data = { text, voice: VOICE, model: MODEL };
+  const data = { text };
 
   const key = await createKey(data);
 
@@ -14,6 +11,9 @@ export async function playSpeech(text: string) {
   if (!blob) {
     const res = await fetch("/api/text-speech", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
 
@@ -34,7 +34,7 @@ export async function playSpeech(text: string) {
       URL.revokeObjectURL(audioUrl);
       resolve();
     };
-  
+
     audio.onerror = () => {
       URL.revokeObjectURL(audioUrl);
       reject(new Error("Audio playback failed"));
