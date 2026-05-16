@@ -15,8 +15,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { RevisedDiaryResponse } from "@/types/diary";
 
 import { useActionState } from "react";
-import saveDiary from "@/app/actions/save-diary-action";
-import { toast } from "sonner";
+import saveDiary from "@/app/actions/diary/save-action";
+import moment from "moment";
+import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
+import { useRouter } from "next/navigation";
 
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
@@ -33,6 +35,7 @@ export default function SaveDiaryDialog({
   revisedDiaryResponse,
   date,
 }: SaveDiaryDialogProps) {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [state, formAction, isPending] = useActionState(
     saveDiary,
@@ -43,26 +46,13 @@ export default function SaveDiaryDialog({
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
-      toast.success(state.message, { position: "top-center",
-        style: {
-          "--normal-text":
-            "light-dark(var(--color-green-600), var(--color-green-400))",
-          "--normal-border":
-            "light-dark(var(--color-green-600), var(--color-green-400))",
-        } as React.CSSProperties,
-      });
+      showSuccessToast(state.message);
       setOpen(false);
       setTitle("");
-      // redirect to diary detail page
+      router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       return;
     }
-    toast.error(state.message, { position: "top-center",
-      style: {
-      "--normal-text":
-        "light-dark(var(--color-red-600), var(--color-red-400))",
-      "--normal-border":
-        "light-dark(var(--color-red-600), var(--color-red-400))",
-    } as React.CSSProperties, });
+    showErrorToast(state.message);
     setOpen(false);
     setTitle("");
     return;
