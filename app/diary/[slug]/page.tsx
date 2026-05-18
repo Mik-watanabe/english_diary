@@ -12,6 +12,7 @@ import { DiaryTabs } from "@/app/ui/diary/tabs";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, NotepadText } from "lucide-react";
 import { parseDiaryDate } from "@/lib/date";
+import { SectionHeading } from "@/app/ui/diary/section-heading";
 
 const logGetUserDiaryFailure = (
   code: GetUserDiaryErrorCode,
@@ -20,7 +21,6 @@ const logGetUserDiaryFailure = (
   console.error("[getUserDiary]", code, message);
 };
 
-const sectionHeadingClass = "text-sm font-semibold text-slate-900 px-2 pb-2";
 const editorWrapperClass =
   "[&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700 [&_textarea]:placeholder:text-slate-400 [&_textarea]:focus:border-blue-300 [&_textarea]:focus:outline-none [&_textarea]:focus:ring-2 [&_textarea]:focus:ring-blue-200/80";
 const contentPanelClass =
@@ -81,13 +81,11 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <ChevronRight className="size-4" />
           </Link>
         </div>
-        <h2 className={cn(sectionHeadingClass, "px-0 py-6 text-center text-xl font-semibold")}>Title: {title}</h2>
+        <SectionHeading className="px-0 py-6 text-center text-xl font-semibold">Title: {title}</SectionHeading>
       </section>
       <section>
         <div className="w-full [&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700">
-          <h2 className={cn(sectionHeadingClass, "px-0 pb-0")}>
-            🌤️ Your Original Diary:
-          </h2>
+          <SectionHeading className="px-0 pb-0">🌤️ Your Original Diary:</SectionHeading>
           <textarea
             readOnly
             rows={5}
@@ -99,15 +97,15 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         </div>
       </section>
       <section className="mt-4">
-        <h2 className={sectionHeadingClass}>
+        <SectionHeading>
           ✨ Revised Diary <TextSpeechButton revisedText={revised} />
-        </h2>
+        </SectionHeading>
         <div className={cn(contentPanelClass, "leading-relaxed")}>
           <p className="bg-white rounded-md px-3 py-2">{revisedWithHighlight}</p>
         </div>
       </section>
       <section className="mt-4">
-        <h2 className={sectionHeadingClass}>💡 AI Feedback</h2>
+        <SectionHeading>💡 AI Feedback</SectionHeading>
         <div className="rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/30 p-2">
           <DiaryTabs corrections={corrections} alternative={alternative} />
         </div>
