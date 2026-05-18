@@ -34,7 +34,7 @@ const DiaryEditor = ({
   };
 
   return (
-    <div className="">
+    <div>
       <textarea
         readOnly={loading}
         name="diary"

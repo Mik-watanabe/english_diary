@@ -63,7 +63,7 @@ export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
         </Card>
       </TabsContent>
       <TabsContent value="alternative">
-        <Card>
+        <Card className="mt-3 p-3 ring-0 bg-white">
           <CardContent className="">{alternative}</CardContent>
         </Card>
       </TabsContent>
