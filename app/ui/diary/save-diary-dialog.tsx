@@ -19,7 +19,8 @@ import saveDiary from "@/app/actions/diary/save-action";
 import moment from "moment";
 import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
 import { useRouter } from "next/navigation";
-
+import { cn } from "@/lib/utils";
+import { Save } from "lucide-react";
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
   date: string;
@@ -70,13 +71,17 @@ export default function SaveDiaryDialog({
       <DialogTrigger
         render={
           <Button
+            variant="outline"
             onClick={() => setOpen(true)}
-            className={
-              !revisedDiaryResponse ? "cursor-not-allowed bg-gray-400" : ""
-            }
+            className={cn(
+              "font-semibold shadow-sm",
+              !revisedDiaryResponse
+                ? "cursor-not-allowed border-[#E5EDF8] bg-slate-50 text-slate-400 hover:bg-slate-50 hover:text-slate-400"
+                : "border-blue-500 bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 hover:cursor-pointer",
+            )}
             disabled={!revisedDiaryResponse}
           >
-            Save Diary
+            <Save />Save Diary
           </Button>
         }
       />
@@ -93,7 +98,7 @@ export default function SaveDiaryDialog({
             placeholder="Put one word to describe your diary"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="my-4"
+            className="my-4 focus-visible:ring-blue-500/80"
           />
           <input type="hidden" name="date" value={date} />
           <input
@@ -122,6 +127,7 @@ export default function SaveDiaryDialog({
               render={
                 <Button
                   variant="outline"
+                  className="font-semibold hover:cursor-pointer"
                   disabled={isPending}
                   onClick={() => setOpen(false)}
                 >
@@ -132,6 +138,7 @@ export default function SaveDiaryDialog({
             <Button
               type="submit"
               disabled={isPending || title.trim().length === 0}
+              className="border-blue-500 bg-blue-500 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer hover:text-white"
             >
               {isPending ? (
                 <Spinner
