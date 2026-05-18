@@ -1,14 +1,14 @@
 import { Toaster } from "sonner";
-import { CreateHeader } from "@/app/ui/diary/create-header";
+import { DetailHeader } from "@/app/ui/diary/detail-header";
 
-export default function DiaryCreateLayout({
+export default function DiaryDetailLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <CreateHeader />
+      <DetailHeader />
       <main className="mx-auto w-full max-w-4xl px-4 py-8 pb-16">
         <Toaster />
         {children}

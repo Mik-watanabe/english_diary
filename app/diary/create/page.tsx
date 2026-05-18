@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
-import moment from "moment";
+import { parseDiaryDate } from "@/lib/date";
 import { highlightDiff } from "@/lib/diaryHighlight";
 import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
@@ -29,13 +29,11 @@ const CreateDiaryPage = () => {
   const searchParams = useSearchParams();
   const [alternative, setAlternative] = useState<string>("");
 
-  const rawDate = searchParams.get("date");
-
-  if (!rawDate || !moment(rawDate, "YYYY-MM-DD", true).isValid()) {
+  const parsedDate = parseDiaryDate(searchParams.get("date"));
+  if (!parsedDate) {
     notFound();
   }
-
-  const date = moment(rawDate).format("MMM DD, YYYY");
+  const date = parsedDate.format("MMM DD, YYYY");
 
   const handleRevise = async (diaryValue: string) => {
     if (!diaryValue.trim()) return;
@@ -80,7 +78,7 @@ const CreateDiaryPage = () => {
           <h2 className={cn(sectionHeadingClass, "px-0 pb-0")}>
             🌤️ How was your day?
           </h2>
-          <div className="shrink-0 [&_button]:h-9 [&_button]:rounded-xl [&_button]:px-3 [&_button]:font-semibold">
+          <div className="shrink-0 [&_button]:h-9 [&_button]:rounded-xl [&_button]:px-4 [&_button]:font-semibold">
             <SaveDialog
               date={date}
               revisedDiaryResponse={revisedDiaryResponse}
