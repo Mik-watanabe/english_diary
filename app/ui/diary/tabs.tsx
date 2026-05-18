@@ -18,8 +18,9 @@ type DiaryTabsProps = {
 
 export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
   const isCorrectionsEmpty = corrections?.length === 0;
+  const defaultTab = isCorrectionsEmpty ? "alternative" : "corrections";
   return (
-    <Tabs defaultValue="corrections" className="w-full">
+    <Tabs defaultValue={defaultTab} className="w-full">
       <TabsList variant="line">
         <TabsTrigger
           value="corrections"
@@ -51,7 +52,7 @@ export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className="font-medium bg-blue-500/10 text-blue-500 border-b-blue font-semibold px-2 py-1 rounded-md">
+                    <span className="font-medium bg-blue-500/10 text-blue-500 font-semibold px-2 py-1 rounded-md">
                       {item.revised}
                     </span>
                   </TableCell>

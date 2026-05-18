@@ -38,7 +38,7 @@ export default function SignoutDialog({
             Are you sure you want to sign out?
           </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-col gap-2">
+        <div className="grid grid-cols-1 gap-2">
           <Button
             className="text-md rounded-full border-blue-500 bg-blue-500 py-5 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer"
             onClick={() => handleSignOut()}
@@ -46,7 +46,7 @@ export default function SignoutDialog({
             Sign out
           </Button>
           <Button
-            className="text-md rounded-full border border-gray-300 bg-gray-white py-5 font-semibold text-black hover:bg-gray-200 hover:cursor-pointer"
+            className="text-md rounded-full border border-gray-300 bg-white py-5 font-semibold text-black hover:bg-gray-200 hover:cursor-pointer"
             onClick={() => onSetOpen(false)}
           >
             Cancel

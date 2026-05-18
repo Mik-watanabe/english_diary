@@ -8,7 +8,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "English Diary",
-  description: "English Diary is a tool that helps you practice your English writing skills by AI based corrections and let you pratice speaking English by listening to the AI generated audio.",
+  description: "English Diary is a tool that helps you practice your English writing skills through AI-based corrections and practice speaking by listening to AI-generated audio.",
 };
 
 export default function RootLayout({

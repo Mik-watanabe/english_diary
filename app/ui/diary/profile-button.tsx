@@ -7,9 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  LogOutIcon,
-} from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { useState } from "react";
 import SignoutDialog from "./signout-dialog";
 
@@ -26,7 +24,10 @@ export function ProfileButton() {
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
-            <button className="hover:cursor-pointer font-semibold text-xs size-9 rounded-full bg-[#F5F9FF] text-blue-600 shadow-sm hover:bg-blue-50">
+            <button
+              type="button"
+              className="hover:cursor-pointer font-semibold text-xs size-9 rounded-full bg-[#F5F9FF] text-blue-600 shadow-sm hover:bg-blue-50"
+            >
               {initial}
             </button>
           }
@@ -43,7 +44,7 @@ export function ProfileButton() {
               setOpen(true);
             }}
           >
-            <LogOutIcon/>
+            <LogOutIcon />
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>
