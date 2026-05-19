@@ -1,58 +1,22 @@
-"use client";
+import { DiaryHeader } from "../ui/diary/header";
+import { ProfileButton } from "../ui/diary/profile-button";
+import DiaryCalendar from "../ui/diary/calendar";
+import { PencilLine } from "lucide-react";
 
-import React, { useCallback, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-
-const localizer = momentLocalizer(moment);
 
 export default function CalendarPage() {
 
-    const router = useRouter();
-    const events = [
-        {
-            title: "Went to a cafe ☕",
-            start: new Date(2026, 4, 2),
-            end: new Date(2026, 4, 2),
-            allDay: true,
-          }
-    ];
-  const [myEvents, setEvents] = useState(events);
-
-  const handleSelectSlot = useCallback(
-    ({ start }: { start: Date; }) => {
-        const exists = myEvents.some(event =>
-            event.start.toDateString() == start.toDateString()
-        );
-
-        if (exists) {
-            return;
-        }
-
-        router.push(`/diary/create?date=${moment(start).format("YYYY-MM-DD")}`);
-    
-    },
-    [setEvents],
-  );
-
-  const handleSelectEvent = useCallback(
-    (event: { title: string }) => window.alert(event.title),
-    [],
-  );
   return (
-    <Calendar
-      dayLayoutAlgorithm="no-overlap"
-      localizer={localizer}
-      events={myEvents}
-      startAccessor="start"
-      endAccessor="end"
-      onSelectSlot={handleSelectSlot}
-      onSelectEvent={handleSelectEvent}
-      selectable
-      style={{ height: 500 }}
-      views={["month"]}
-    />
+    <>
+      <DiaryHeader>
+        <h1 className="text-xl font-bold text-blue-600">English Diary</h1>  
+        <ProfileButton />
+      </DiaryHeader>
+      <main className="mx-auto w-full max-w-4xl px-4 py-8 pb-16">
+        {/* TODO: Add Toaster */}
+        <DiaryCalendar />
+        <p className="text-xs text-gray-500 mt-2"><PencilLine className="size-3 inline-block mr-1" />Click the day to create a new diary entry</p>
+      </main>
+    </>
   );
 }

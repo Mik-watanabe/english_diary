@@ -1,0 +1,122 @@
+/* react-big-calendar overrides — scoped to .diary-calendar */
+.diary-calendar {
+  --diary-calendar-border: #e5edf8;
+  --diary-calendar-surface: #f5f9ff;
+  --diary-calendar-text: #334155;
+  --diary-calendar-text-muted: #64748b;
+  --diary-calendar-text-faint: #94a3b8;
+  --diary-calendar-accent: #3b82f6;
+  --diary-calendar-accent-hover: #2563eb;
+}
+
+.diary-calendar .rbc-calendar {
+  color: var(--diary-calendar-text);
+  font-family: inherit;
+}
+
+.diary-calendar .rbc-toolbar {
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.diary-calendar .rbc-toolbar .rbc-toolbar-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-align: right;
+}
+
+.diary-calendar .rbc-toolbar button {
+  background-color: #ffffff;
+  color: var(--diary-calendar-accent);
+  border: 1px solid var(--diary-calendar-border);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    color 0.15s,
+    background-color 0.15s,
+    border-color 0.15s;
+}
+
+.diary-calendar .rbc-toolbar button:hover,
+.diary-calendar .rbc-toolbar button:focus {
+  color: var(--diary-calendar-accent-hover);
+  background-color: var(--diary-calendar-surface);
+}
+
+.diary-calendar .rbc-toolbar button:active,
+.diary-calendar .rbc-toolbar button.rbc-active {
+  color: var(--diary-calendar-accent-hover);
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+  box-shadow: none;
+}
+
+.diary-calendar .rbc-header {
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--diary-calendar-text-muted);
+  border-bottom: 1px solid var(--diary-calendar-border);
+}
+
+.diary-calendar .rbc-header + .rbc-header {
+  border-left: 1px solid var(--diary-calendar-border);
+}
+
+.diary-calendar .rbc-month-view {
+  background-color: #ffffff;
+  border: 1px solid var(--diary-calendar-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.diary-calendar .rbc-month-row + .rbc-month-row {
+  border-top: 1px solid var(--diary-calendar-border);
+}
+
+.diary-calendar .rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid var(--diary-calendar-border);
+}
+
+.diary-calendar .rbc-off-range {
+  color: var(--diary-calendar-text-faint);
+}
+
+.diary-calendar .rbc-off-range-bg {
+  background-color: #f8fafc;
+}
+
+.diary-calendar .rbc-today {
+  background-color: var(--diary-calendar-surface);
+}
+
+.diary-calendar .rbc-date-cell {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--diary-calendar-text);
+  text-align: right;
+}
+
+.diary-calendar .rbc-date-cell.rbc-now {
+  font-weight: 700;
+  color: var(--diary-calendar-accent);
+}
+
+.diary-calendar .rbc-date-cell > a,
+.diary-calendar .rbc-date-cell > button {
+  color: inherit;
+}
+
+.diary-calendar .rbc-row-segment {
+  padding: 0 0.25rem 0.25rem;
+}
+
+.diary-calendar .rbc-show-more {
+  color: var(--diary-calendar-accent);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
