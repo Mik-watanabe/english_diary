@@ -3,7 +3,11 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
 import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer, type EventPropGetter } from "react-big-calendar";
+import {
+  Calendar,
+  momentLocalizer,
+  type EventPropGetter,
+} from "react-big-calendar";
 import moment from "moment";
 import { DiaryEvent } from "@/types/diary";
 import { getUserDiaryTitleByMonth } from "@/app/actions/diary/read-action";
@@ -35,7 +39,25 @@ export default function DiaryCalendar() {
   const [month, setMonth] = useState<Date>(initialMonth);
   const [events, setEvents] = useState<DiaryEvent[]>([]);
 
-  const fetchEvents = async (targetDate: Date) => {
+  //   const fetchEvents = async (targetDate: Date) => {
+  //     const from = moment(targetDate)
+  //       .startOf("month")
+  //       .startOf("week")
+  //       .format("YYYY-MM-DD");
+  //     const to = moment(targetDate)
+  //       .endOf("month")
+  //       .endOf("week")
+  //       .format("YYYY-MM-DD");
+
+  //     const result = await getUserDiaryTitleByMonth(from, to);
+  //     if (result.success) {
+  //       setEvents(result.diaryData);
+  //     } else {
+  //       console.error(result.message);
+  //     }
+  //   };
+
+  const fetchEvents = async (targetDate: Date): Promise<DiaryEvent[]> => {
     const from = moment(targetDate)
       .startOf("month")
       .startOf("week")
@@ -44,17 +66,26 @@ export default function DiaryCalendar() {
       .endOf("month")
       .endOf("week")
       .format("YYYY-MM-DD");
-
     const result = await getUserDiaryTitleByMonth(from, to);
-    if (result.success) {
-      setEvents(result.diaryData);
-    } else {
-      console.error(result.message);
+    if (!result.success) {
+      throw new Error(result.message);
     }
+    return result.diaryData;
   };
 
   useEffect(() => {
-    fetchEvents(month);
+    let cancelled = false;
+    (async () => {
+      try {
+        const nextEvents = await fetchEvents(month);
+        if (!cancelled) setEvents(nextEvents);
+      } catch (error) {
+        if (!cancelled) console.error(error);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [month]);
 
   const handleSelectSlot = ({ start }: { start: Date }) => {
