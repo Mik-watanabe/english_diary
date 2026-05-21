@@ -38,6 +38,7 @@ export default function SaveDiaryDialog({
 }: SaveDiaryDialogProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [state, formAction, isPending] = useActionState(
     saveDiary,
     initialState,
@@ -47,10 +48,10 @@ export default function SaveDiaryDialog({
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
-      showSuccessToast(state.message);
       setOpen(false);
       setTitle("");
       router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
+      showSuccessToast("Diary saved!");
       return;
     }
     showErrorToast(state.message);
@@ -58,6 +59,12 @@ export default function SaveDiaryDialog({
     setTitle("");
     return;
   }, [state]);
+
+  useEffect(() => {
+    const words = title.trim();
+    setIsButtonDisabled(words.length < 1 || words.length > 50);
+  }, [title]);
+
   return (
     <Dialog
       open={open}
@@ -95,10 +102,10 @@ export default function SaveDiaryDialog({
           <Input
             id="title"
             name="title"
-            placeholder="Put one word to describe your diary"
+            placeholder="Max 50 characters"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="my-4 focus-visible:ring-blue-500/80"
+            className="text-xs my-4 focus-visible:ring-blue-300/80 focus-visible:ring-2 focus-visible:border-blue-300"
           />
           <input type="hidden" name="date" value={date} />
           <input
@@ -137,7 +144,7 @@ export default function SaveDiaryDialog({
             />
             <Button
               type="submit"
-              disabled={isPending || title.trim().length === 0}
+              disabled={isPending || isButtonDisabled}
               className="border-blue-500 bg-blue-500 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer hover:text-white"
             >
               {isPending ? (

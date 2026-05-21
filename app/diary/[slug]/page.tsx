@@ -13,7 +13,6 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, NotepadText } from "lucide-react";
 import { parseDiaryDate } from "@/lib/date";
 import { SectionHeading } from "@/app/ui/diary/section-heading";
-
 const logGetUserDiaryFailure = (
   code: GetUserDiaryErrorCode,
   message: string,
@@ -44,6 +43,8 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
       redirect("/login");
     }
     if (code === "diary_not_found") {
+
+      // TODO: Suggest to create a new diary
       notFound();
     }
     logGetUserDiaryFailure(code, message);

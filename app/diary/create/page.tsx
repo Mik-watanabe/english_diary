@@ -15,8 +15,6 @@ import { SectionHeading } from "@/app/ui/diary/section-heading";
 
 const contentPanelClass =
   "rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/40 p-3 text-slate-700";
-const editorWrapperClass =
-  "[&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700 [&_textarea]:placeholder:text-slate-400 [&_textarea]:focus:border-blue-300 [&_textarea]:focus:outline-none [&_textarea]:focus:ring-2 [&_textarea]:focus:ring-blue-200/80";
 
 const CreateDiaryPage = () => {
   const [revisedDiaryValue, setRevisedDiaryValue] = useState<React.ReactNode[]>(
@@ -83,7 +81,7 @@ const CreateDiaryPage = () => {
             />
           </div>
         </div>
-        <div className={editorWrapperClass}>
+        <div className="mt-4">
           <DiaryEditor handleRevise={handleRevise} loading={loading} />
         </div>
       </section>
