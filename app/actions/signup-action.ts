@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import type { SignupState } from "@/types/diary";
 
 const SignupSchema = z
   .object({
@@ -19,8 +20,10 @@ const SignupSchema = z
     message: "Passwords do not match.",
   });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function signup(initialState: any, formData: FormData) {
+export async function signup(
+  initialState: SignupState,
+  formData: FormData,
+): Promise<SignupState> {
   const validatedFields = SignupSchema.safeParse({
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),

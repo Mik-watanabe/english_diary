@@ -65,3 +65,15 @@ export type DiaryEvent = {
   end: Date;
   allDay: boolean;
 };
+
+export type SignupState = {
+  success: boolean;
+  message: string;
+  errors?: {
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    password?: string[];
+    confirmPassword?: string[];
+  };
+};

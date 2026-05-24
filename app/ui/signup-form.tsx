@@ -8,8 +8,9 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import Link from "next/link";
 import { useActionState } from "react";
 import { signup } from "@/app/actions/signup-action";
+import type { SignupState } from "@/types/diary";
 
-const initialState = {
+const initialState: SignupState = {
   success: false,
   message: "",
   errors: {},
