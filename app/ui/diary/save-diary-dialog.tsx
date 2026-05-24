@@ -47,10 +47,10 @@ export default function SaveDiaryDialog({
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
-      showSuccessToast(state.message);
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
+      showSuccessToast("Diary saved!");
       router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       return;
     }
@@ -59,6 +59,10 @@ export default function SaveDiaryDialog({
     setTitle("");
     return;
   }, [state, router, date]);
+
+  const isButtonDisabled =
+    title.trim().length < 1 || title.trim().length > 50 || isPending;
+
   return (
     <Dialog
       open={open}
@@ -97,10 +101,10 @@ export default function SaveDiaryDialog({
           <Input
             id="title"
             name="title"
-            placeholder="Put one word to describe your diary"
+            placeholder="Max 50 characters"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="my-4 focus-visible:ring-blue-500/80"
+            className="my-4 text-xs focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-300/80"
           />
           <input type="hidden" name="date" value={date} />
           <input
@@ -139,7 +143,7 @@ export default function SaveDiaryDialog({
             />
             <Button
               type="submit"
-              disabled={isPending || title.trim().length === 0}
+              disabled={isButtonDisabled}
               className="border-blue-500 bg-blue-500 font-semibold text-white hover:cursor-pointer hover:bg-blue-600 hover:text-white"
             >
               {isPending ? (

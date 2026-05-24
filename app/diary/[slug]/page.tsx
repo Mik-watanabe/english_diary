@@ -10,7 +10,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, NotepadText } from "lucide-react";
 import { parseDiaryDate } from "@/lib/date";
 import { SectionHeading } from "@/app/ui/diary/section-heading";
-
+import { DiaryEmptyState } from "@/app/ui/diary/diary-empty-state";
 const logGetUserDiaryFailure = (
   code: GetUserDiaryErrorCode,
   message: string,
@@ -39,15 +39,15 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
       redirect("/login");
     }
     if (code === "diary_not_found") {
+    } else {
+      logGetUserDiaryFailure(code, message);
       notFound();
     }
-    logGetUserDiaryFailure(code, message);
-    notFound();
   }
-  const { original, revised, corrections, alternative, title } =
-    result.diaryData;
-
-  const revisedWithHighlight = highlightDiff(original, revised);
+  const isEmpty = !result.success && result.code === "diary_not_found";
+  const diary = result.success ? result.diaryData : null;
+  const revisedWithHighlight =
+    diary != null ? highlightDiff(diary.original, diary.revised) : null;
 
   return (
     <div className="rounded-3xl border border-[#E5EDF8] bg-white p-4 shadow-lg shadow-[#E5EDF8]/50">
@@ -70,41 +70,53 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <ChevronRight className="size-4" />
           </Link>
         </div>
-        <SectionHeading className="px-0 py-6 text-center text-xl font-semibold">
-          Title: {title}
-        </SectionHeading>
-      </section>
-      <section>
-        <div className="w-full [&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700">
-          <SectionHeading className="px-0 pb-0">
-            🌤️ Your Original Diary:
+        {!isEmpty && (
+          <SectionHeading className="px-0 py-6 text-center text-xl font-semibold">
+            Title: {diary?.title}
           </SectionHeading>
-          <textarea
-            readOnly
-            rows={5}
-            name="diary"
-            id="diary"
-            value={original}
-            className="mt-2 w-full rounded-xl border border-gray-300 p-2 focus-within:outline-none"
-          />
-        </div>
+        )}
       </section>
-      <section className="mt-4">
-        <SectionHeading>
-          ✨ Revised Diary <TextSpeechButton revisedText={revised} />
-        </SectionHeading>
-        <div className={cn(contentPanelClass, "leading-relaxed")}>
-          <p className="rounded-md bg-white px-3 py-2">
-            {revisedWithHighlight}
-          </p>
-        </div>
-      </section>
-      <section className="mt-4">
-        <SectionHeading>💡 AI Feedback</SectionHeading>
-        <div className="rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/30 p-2">
-          <DiaryTabs corrections={corrections} alternative={alternative} />
-        </div>
-      </section>
+      {isEmpty ? (
+        <DiaryEmptyState date={date.format("YYYY-MM-DD")} />
+      ) : (
+        <>
+          <section>
+            <div className="w-full [&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700">
+              <SectionHeading className="px-0 pb-0">
+                🌤️ Your Original Diary:
+              </SectionHeading>
+              <textarea
+                readOnly
+                rows={5}
+                name="diary"
+                id="diary"
+                value={diary?.original}
+                className="mt-2 w-full rounded-xl border border-gray-300 p-2 focus-within:outline-none"
+              />
+            </div>
+          </section>
+          <section className="mt-4">
+            <SectionHeading>
+              ✨ Revised Diary{" "}
+              <TextSpeechButton revisedText={diary?.revised || ""} />
+            </SectionHeading>
+            <div className={cn(contentPanelClass, "leading-relaxed")}>
+              <p className="rounded-md bg-white px-3 py-2">
+                {revisedWithHighlight}
+              </p>
+            </div>
+          </section>
+          <section className="mt-4">
+            <SectionHeading>💡 AI Feedback</SectionHeading>
+            <div className="rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/30 p-2">
+              <DiaryTabs
+                corrections={diary?.corrections || []}
+                alternative={diary?.alternative || ""}
+              />
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 };

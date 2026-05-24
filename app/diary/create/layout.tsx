@@ -1,4 +1,3 @@
-import { Toaster } from "sonner";
 import { CreateHeader } from "@/app/ui/diary/create-header";
 
 export default function DiaryCreateLayout({
@@ -10,7 +9,6 @@ export default function DiaryCreateLayout({
     <>
       <CreateHeader />
       <main className="mx-auto w-full max-w-4xl px-4 py-8 pb-16">
-        <Toaster />
         {children}
       </main>
     </>
