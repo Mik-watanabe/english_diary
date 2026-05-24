@@ -1,5 +1,6 @@
 import { UserProvider } from "@/components/providers/UserProvider";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function ProtectedLayout({
   children,
