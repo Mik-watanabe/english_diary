@@ -1,9 +1,7 @@
 import React from "react";
 import { notFound, redirect } from "next/navigation";
-import {
-  getUserDiary,
-  type GetUserDiaryErrorCode,
-} from "@/app/actions/diary/read-action";
+import { getUserDiary } from "@/app/actions/diary/read-action";
+import type { GetUserDiaryErrorCode } from "@/types/diary";
 import { highlightDiff } from "@/lib/diaryHighlight";
 import TextSpeechButton from "@/app/ui/diary/text-speech-button";
 import { cn } from "@/lib/utils";
