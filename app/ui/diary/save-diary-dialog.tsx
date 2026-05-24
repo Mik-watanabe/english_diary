@@ -48,6 +48,7 @@ export default function SaveDiaryDialog({
     if (!state?.message) return;
     if (state.success) {
       showSuccessToast(state.message);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
       router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
@@ -57,7 +58,7 @@ export default function SaveDiaryDialog({
     setOpen(false);
     setTitle("");
     return;
-  }, [state]);
+  }, [state, router, date]);
   return (
     <Dialog
       open={open}
@@ -77,11 +78,12 @@ export default function SaveDiaryDialog({
               "font-semibold shadow-sm",
               !revisedDiaryResponse
                 ? "cursor-not-allowed border-[#E5EDF8] bg-slate-50 text-slate-400 hover:bg-slate-50 hover:text-slate-400"
-                : "border-blue-500 bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 hover:cursor-pointer",
+                : "border-blue-500 bg-white text-blue-600 hover:cursor-pointer hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700",
             )}
             disabled={!revisedDiaryResponse}
           >
-            <Save />Save Diary
+            <Save />
+            Save Diary
           </Button>
         }
       />
@@ -138,12 +140,12 @@ export default function SaveDiaryDialog({
             <Button
               type="submit"
               disabled={isPending || title.trim().length === 0}
-              className="border-blue-500 bg-blue-500 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer hover:text-white"
+              className="border-blue-500 bg-blue-500 font-semibold text-white hover:cursor-pointer hover:bg-blue-600 hover:text-white"
             >
               {isPending ? (
                 <Spinner
                   data-icon="inline-start"
-                  className="inline-block mr-2"
+                  className="mr-2 inline-block"
                 />
               ) : (
                 <></>

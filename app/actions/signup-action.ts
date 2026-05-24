@@ -1,6 +1,6 @@
 "use server";
 
-import { z, flattenError } from "zod";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -19,6 +19,7 @@ const SignupSchema = z
     message: "Passwords do not match.",
   });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function signup(initialState: any, formData: FormData) {
   const validatedFields = SignupSchema.safeParse({
     firstName: formData.get("firstName"),
@@ -29,11 +30,11 @@ export async function signup(initialState: any, formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    const flattenedErros = z.flattenError(validatedFields.error);
+    const flattenedErrors = z.flattenError(validatedFields.error);
     return {
       success: false,
       message: "",
-      errors: flattenedErros.fieldErrors,
+      errors: flattenedErrors.fieldErrors,
     };
   }
 
@@ -52,18 +53,18 @@ export async function signup(initialState: any, formData: FormData) {
 
   if (error) {
     return {
-        success: false,
-        errors: {},
-        message: "Failed to create account. Please try again.",
-    }
-  } 
+      success: false,
+      errors: {},
+      message: "Failed to create account. Please try again.",
+    };
+  }
 
   if (data.user && data.user.identities?.length === 0) {
     return {
       success: false,
       errors: {},
       message: "This email may already be registered. Please sign in instead.",
-    }
+    };
   }
 
   redirect("/signup/check-your-email");
