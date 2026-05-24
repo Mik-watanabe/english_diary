@@ -32,36 +32,36 @@ export type GetUserDiaryResult =
   | ErrorGetUserDiaryResult;
 
 export type SuccessGetUserDiaryResult = {
-    success: true;
-    diaryData: DiaryData;
-}
+  success: true;
+  diaryData: DiaryData;
+};
 
 export type ErrorGetUserDiaryResult = {
-    success: false;
-    code: GetUserDiaryErrorCode;
-    message: string;
-    diaryData: null;
-}
+  success: false;
+  code: GetUserDiaryErrorCode;
+  message: string;
+  diaryData: null;
+};
 
 export type GetUserDiaryTitleByMonthResult =
   | SuccessGetUserDiaryTitleByMonthResult
   | ErrorGetUserDiaryTitleByMonthResult;
 
 export type SuccessGetUserDiaryTitleByMonthResult = {
-    success: true;
-    diaryData: DiaryEvent[];
-}
+  success: true;
+  diaryData: DiaryEvent[];
+};
 
 export type ErrorGetUserDiaryTitleByMonthResult = {
-    success: false;
-    code: "auth_failed" | "diary_query_failed";
-    message: string;
-    diaryData: null;
-}
+  success: false;
+  code: "auth_failed" | "diary_query_failed";
+  message: string;
+  diaryData: null;
+};
 
 export type DiaryEvent = {
-   title:string;
-   start: Date;
-   end: Date;
-   allDay: boolean;
-}
+  title: string;
+  start: Date;
+  end: Date;
+  allDay: boolean;
+};

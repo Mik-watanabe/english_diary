@@ -15,7 +15,6 @@ export default function TextSpeechButton({
 
   // const [textToSpeech, setTextToSpeech] = useState<string>("");
   const handleTextToSpeech = async (text: string) => {
-
     try {
       setLoading(true);
       await playSpeech(text);
@@ -28,14 +27,18 @@ export default function TextSpeechButton({
   return (
     // TODO: Add stop / resume functionality
     <Button
-        aria-label="Play speech"
+      aria-label="Play speech"
       disabled={loading}
       variant="outline"
       size="icon"
       className="hover:cursor-pointer"
       onClick={() => handleTextToSpeech(revisedText)}
     >
-      {loading ? <Pause className="w-2 h-2"/> : <Volume2 className="w-2 h-2" />}
+      {loading ? (
+        <Pause className="h-2 w-2" />
+      ) : (
+        <Volume2 className="h-2 w-2" />
+      )}
     </Button>
   );
 }
