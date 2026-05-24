@@ -21,33 +21,33 @@ function openIndexedDB(): Promise<IDBDatabase> {
 }
 
 export async function getSpeechBlob(key: string): Promise<Blob | null> {
-    const db = await openIndexedDB();
+  const db = await openIndexedDB();
 
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, "readonly");
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.get(key);
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.get(key);
 
-        req.onsuccess = () => resolve(req.result?.blob ?? null);
-        req.onerror = () => reject(req.error);
-    });
+    req.onsuccess = () => resolve(req.result?.blob ?? null);
+    req.onerror = () => reject(req.error);
+  });
 }
 
 export async function setSpeechBlob(key: string, blob: Blob) {
-    const db = await openIndexedDB();
+  const db = await openIndexedDB();
 
-    const cache: SpeechCache = {
-        key,
-        blob,
-        createdAt: Date.now()
-    };
+  const cache: SpeechCache = {
+    key,
+    blob,
+    createdAt: Date.now(),
+  };
 
-    return new Promise<void>((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, "readwrite");
-        const store = tx.objectStore(STORE_NAME);
-        store.put(cache);
+  return new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    store.put(cache);
 
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
-    });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
 }

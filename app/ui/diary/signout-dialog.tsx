@@ -32,21 +32,21 @@ export default function SignoutDialog({
         onSetOpen(nextOpen);
       }}
     >
-      <DialogContent className="sm:max-w-sm p-6" showCloseButton={false}>
+      <DialogContent className="p-6 sm:max-w-sm" showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-center">
+          <DialogTitle className="text-center text-lg font-semibold">
             Are you sure you want to sign out?
           </DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-1 gap-2">
           <Button
-            className="text-md rounded-full border-blue-500 bg-blue-500 py-5 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer"
+            className="text-md rounded-full border-blue-500 bg-blue-500 py-5 font-semibold text-white hover:cursor-pointer hover:bg-blue-600"
             onClick={() => handleSignOut()}
           >
             Sign out
           </Button>
           <Button
-            className="text-md rounded-full border border-gray-300 bg-white py-5 font-semibold text-black hover:bg-gray-200 hover:cursor-pointer"
+            className="text-md rounded-full border border-gray-300 bg-white py-5 font-semibold text-black hover:cursor-pointer hover:bg-gray-200"
             onClick={() => onSetOpen(false)}
           >
             Cancel

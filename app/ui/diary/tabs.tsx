@@ -34,7 +34,7 @@ export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="corrections">
-        <Card className="mt-3 p-3 ring-0 bg-white">
+        <Card className="mt-3 bg-white p-3 ring-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -47,12 +47,12 @@ export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
               {corrections?.map((item, i) => (
                 <TableRow key={i}>
                   <TableCell>
-                    <span className="font-medium bg-[#f59e0b]/20 px-2 py-1 rounded-md">
+                    <span className="rounded-md bg-[#f59e0b]/20 px-2 py-1 font-medium">
                       {item.original}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className="font-medium bg-blue-500/10 text-blue-500 font-semibold px-2 py-1 rounded-md">
+                    <span className="rounded-md bg-blue-500/10 px-2 py-1 font-medium font-semibold text-blue-500">
                       {item.revised}
                     </span>
                   </TableCell>
@@ -64,7 +64,7 @@ export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
         </Card>
       </TabsContent>
       <TabsContent value="alternative">
-        <Card className="mt-3 p-3 ring-0 bg-white">
+        <Card className="mt-3 bg-white p-3 ring-0">
           <CardContent className="">{alternative}</CardContent>
         </Card>
       </TabsContent>

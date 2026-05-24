@@ -3,11 +3,13 @@
 import { string, z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 
-const correctionsSchema = z.array(z.object({
-  original: z.string(),
-  revised: z.string(),
-  why: z.string(),
-}));
+const correctionsSchema = z.array(
+  z.object({
+    original: z.string(),
+    revised: z.string(),
+    why: z.string(),
+  }),
+);
 
 const SaveDiarySchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -28,8 +30,8 @@ const SaveDiarySchema = z.object({
   }),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function saveDiary(initialState: any, formData: FormData) {
-
   const validatedFields = SaveDiarySchema.safeParse({
     title: formData.get("title"),
     date: formData.get("date"),
@@ -48,7 +50,6 @@ export default async function saveDiary(initialState: any, formData: FormData) {
   }
 
   const supabase = await createClient();
-
 
   const { data, error } = await supabase.rpc("save_diary_with_corrections", {
     p_title: validatedFields.data.title,

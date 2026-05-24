@@ -5,7 +5,6 @@ import { ChevronLeft } from "lucide-react";
 import type { Moment } from "moment";
 import { DiaryHeader } from "./header";
 import { DateTitle } from "./date-title";
-import { ProfileButton } from "./profile-button";
 import moment from "moment";
 
 export function DiaryPageHeader({ date }: { date: Moment }) {
@@ -20,7 +19,6 @@ export function DiaryPageHeader({ date }: { date: Moment }) {
       </Link>
 
       <DateTitle date={date} />
-
     </DiaryHeader>
   );
 }

@@ -11,27 +11,24 @@ import Link from "next/link";
 
 const initialState = {
   success: false,
-  message: "",  
+  message: "",
   errors: {
     email: [],
     password: [],
   },
 };
 
-
 export default function LoginForm() {
-    const [state, formAction] = useActionState(login, initialState);
+  const [state, formAction] = useActionState(login, initialState);
   return (
-    <div className="flex items-center justify-center min-h-dvh">
+    <div className="flex min-h-dvh items-center justify-center">
       <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-balance mt-2 text-center text-lg font-bold text-foreground dark:text-foreground">
+          <h2 className="text-foreground dark:text-foreground mt-2 text-center text-lg font-bold text-balance">
             Login to EnglishDiary
           </h2>
           {state.message && (
-            <p className="text-sm text-red-500 text-center">
-              {state.message}
-            </p>
+            <p className="text-center text-sm text-red-500">{state.message}</p>
           )}
         </div>
 
@@ -49,17 +46,17 @@ export default function LoginForm() {
                     required
                   />
                   {state.errors?.email && (
-                      <p className="text-sm text-red-500">
-                        {state.errors.email[0]}
-                      </p>
-                    )}
+                    <p className="text-sm text-red-500">
+                      {state.errors.email[0]}
+                    </p>
+                  )}
                 </Field>
 
                 <Field>
                   {/* TODO: Add forgot password link */}
                   <FieldLabel htmlFor="form-password">
                     Password{" "}
-                    <span className="text-xs text-blue-500 ml-auto hover:underline hover:cursor-pointer">
+                    <span className="ml-auto text-xs text-blue-500 hover:cursor-pointer hover:underline">
                       Forgot password?
                     </span>
                   </FieldLabel>
@@ -71,27 +68,27 @@ export default function LoginForm() {
                     required
                   />
                   {state.errors?.password && (
-                      <p className="text-sm text-red-500">
-                        {state.errors.password[0]}
-                      </p>
-                    )}
+                    <p className="text-sm text-red-500">
+                      {state.errors.password[0]}
+                    </p>
+                  )}
                 </Field>
               </FieldGroup>
 
               <Button
                 type="submit"
-                className="mt-4 w-full py-2 font-medium hover:opacity-80 hover:cursor-pointer"
+                className="mt-4 w-full py-2 font-medium hover:cursor-pointer hover:opacity-80"
               >
                 Login
               </Button>
             </form>
           </CardContent>
         </Card>
-        <p className="mt-4 text-center text-sm text-muted-foreground dark:text-muted-foreground">
-          Don't have an account?{" "}
+        <p className="text-muted-foreground dark:text-muted-foreground mt-4 text-center text-sm">
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="font-medium text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90"
+            className="text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90 font-medium"
           >
             Sign up
           </Link>
