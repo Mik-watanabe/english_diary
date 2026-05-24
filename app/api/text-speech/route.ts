@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const res = await openaiClient.audio.speech.create({
       model: MODEL,
       input: text,
-      voice: VOICE ,
+      voice: VOICE,
     });
 
     const arrayBuffer = await res.arrayBuffer();

@@ -8,8 +8,9 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import Link from "next/link";
 import { useActionState } from "react";
 import { signup } from "@/app/actions/signup-action";
+import type { SignupState } from "@/types/diary";
 
-const initialState = {
+const initialState: SignupState = {
   success: false,
   message: "",
   errors: {},
@@ -18,16 +19,14 @@ const initialState = {
 export default function SignUpForm() {
   const [state, formAction] = useActionState(signup, initialState);
   return (
-    <div className="flex items-center justify-center min-h-dvh">
+    <div className="flex min-h-dvh items-center justify-center">
       <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-balance mt-2 text-center text-lg font-bold text-foreground dark:text-foreground">
+          <h2 className="text-foreground dark:text-foreground mt-2 text-center text-lg font-bold text-balance">
             Create new account for EnglishDiary
           </h2>
           {state.message && (
-            <p className="text-sm text-red-500 text-center">
-              {state.message}
-            </p>
+            <p className="text-center text-sm text-red-500">{state.message}</p>
           )}
         </div>
 
@@ -120,18 +119,18 @@ export default function SignUpForm() {
 
               <Button
                 type="submit"
-                className="mt-4 w-full py-2 font-medium hover:opacity-80 hover:cursor-pointer"
+                className="mt-4 w-full py-2 font-medium hover:cursor-pointer hover:opacity-80"
               >
                 Create account
               </Button>
             </form>
           </CardContent>
         </Card>
-        <p className="mt-4 text-center text-sm text-muted-foreground dark:text-muted-foreground">
+        <p className="text-muted-foreground dark:text-muted-foreground mt-4 text-center text-sm">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90"
+            className="text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90 font-medium"
           >
             Sign in
           </Link>

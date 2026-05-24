@@ -26,7 +26,7 @@ export function ProfileButton() {
           render={
             <button
               type="button"
-              className="hover:cursor-pointer font-semibold text-xs size-9 rounded-full bg-[#F5F9FF] text-blue-600 shadow-sm hover:bg-blue-50"
+              className="size-9 rounded-full bg-[#F5F9FF] text-xs font-semibold text-blue-600 shadow-sm hover:cursor-pointer hover:bg-blue-50"
             >
               {initial}
             </button>

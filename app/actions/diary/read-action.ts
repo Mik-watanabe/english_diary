@@ -1,7 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { GetUserDiaryResult, DiaryData, DiaryEvent, GetUserDiaryTitleByMonthResult } from "@/types/diary";
+import {
+  GetUserDiaryResult,
+  DiaryData,
+  DiaryEvent,
+  GetUserDiaryTitleByMonthResult,
+} from "@/types/diary";
 import moment from "moment";
 
 export async function getUser() {
@@ -126,15 +131,16 @@ export async function getUserDiaryTitleByMonth(
     };
   }
 
-  const diaryTitles = rowDiaryData?.map((diary) => {
-    const date = moment(diary.diary_date, "YYYY-MM-DD").toDate();
-    return {
-      title: diary.title,
-      start: date,
-      end: date,
-      allDay: true,
-    }
-  }) || [];
+  const diaryTitles =
+    rowDiaryData?.map((diary) => {
+      const date = moment(diary.diary_date, "YYYY-MM-DD").toDate();
+      return {
+        title: diary.title,
+        start: date,
+        end: date,
+        allDay: true,
+      };
+    }) || [];
 
   return {
     success: true,

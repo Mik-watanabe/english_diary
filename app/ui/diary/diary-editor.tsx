@@ -1,11 +1,11 @@
 "use client";
 
 import clsx from "clsx";
-import { useState, useEffect } from "react";
-import { MessageCircleWarning } from "lucide-react";
+import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { Sparkle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MessageCircleWarning } from "lucide-react";
 
 const MAX_WORDS = 125;
 
@@ -17,27 +17,24 @@ const DiaryEditor = ({
   loading: boolean;
 }) => {
   const [diaryValue, setDiaryValue] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [error, setError] = useState("");
   const [wordCount, setWordCount] = useState(0);
 
-  const handleDiaryChange = (v: string) =>  {
+  const handleDiaryChange = (v: string) => {
     setDiaryValue(v);
     const words = v.trim().split(/\s+/).filter(Boolean);
     setWordCount(words.length);
-  }
 
-  useEffect(() => {
-    setIsButtonDisabled(diaryValue.length === 0 || loading);
-    setError("");
-  }, [diaryValue, loading]);
+    if (error) {
+      if (wordCount <= MAX_WORDS && wordCount >= 5) {
+        setError("");
+        return;
+      }
+    }
+  };
 
   const onHandleRevise = () => {
-    if (isButtonDisabled) return;
-    if (diaryValue.trim() === "") {
-      setError("Please enter your diary first");
-      return;
-    } else if (wordCount > MAX_WORDS) {
+    if (wordCount > MAX_WORDS) {
       setError("You have reached the maximum word limit");
       return;
     } else if (wordCount < 5) {
@@ -51,33 +48,40 @@ const DiaryEditor = ({
     "border rounded-xl border-[#E5EDF8] bg-[#F5F9FF]/30 p-3 [&_textarea]:text-slate-700 [&_textarea]:placeholder:text-slate-400 focus-within:border-blue-300 focus-within:outline-none focus-within:ring-2  focus-within:ring-blue-200/80";
   return (
     <>
-      <div className={cn(editorWrapperClass, error && "border-red-500/50 border-2")}>
+      <div
+        className={cn(
+          editorWrapperClass,
+          error && "border-2 border-red-500/50",
+        )}
+      >
         <textarea
           readOnly={loading}
           name="diary"
           id="diary"
           placeholder="Write about your day in english, what you did, how you felt etc (min 5 words, max 125 words)💭"
           rows={10}
-          className="w-full focus-within:outline-none resize-none"
+          className="w-full resize-none focus-within:outline-none"
           onChange={(e) => handleDiaryChange(e.target.value)}
           value={diaryValue}
         ></textarea>
-        <p className="text-sm text-right text-gray-500">{wordCount}/{MAX_WORDS}</p>
+        <p className="text-right text-sm text-gray-500">
+          {wordCount}/{MAX_WORDS}
+        </p>
       </div>
-      <div className="flex flex-col justify-between items-center">
+      <div className="flex flex-col items-center justify-between">
         {error && (
-          <p className="text-red-500 flex items-baseline text-sm py-2">
-            <MessageCircleWarning className="size-4 text-red-500 scale-x-[-1] inline-block mr-1" />
+          <p className="flex items-baseline py-2 text-sm text-red-500">
+            <MessageCircleWarning className="mr-1 inline-block size-4 scale-x-[-1] text-red-500" />
             {error} 🚨
           </p>
         )}
         <button
-          disabled={isButtonDisabled}
+          disabled={loading}
           className={clsx(
             "mt-2 ml-auto flex w-full items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition-colors",
-            isButtonDisabled
+            loading
               ? "cursor-not-allowed border-[#E5EDF8] bg-slate-50 text-slate-400"
-              : "border-blue-500 bg-blue-500 text-white shadow-sm hover:bg-blue-600 hover:border-blue-600 hover:cursor-pointer",
+              : "border-blue-500 bg-blue-500 text-white shadow-sm hover:cursor-pointer hover:border-blue-600 hover:bg-blue-600",
           )}
           onClick={onHandleRevise}
         >

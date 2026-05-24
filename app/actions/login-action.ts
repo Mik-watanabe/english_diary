@@ -9,6 +9,7 @@ const LoginSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function login(initialState: any, formData: FormData) {
   const validatedFields = LoginSchema.safeParse({
     email: formData.get("email"),
@@ -26,10 +27,10 @@ export async function login(initialState: any, formData: FormData) {
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email: validatedFields.data.email,
     password: validatedFields.data.password,
-  });   
+  });
 
   if (error) {
     return {

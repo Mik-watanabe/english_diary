@@ -1,7 +1,5 @@
 type DataProps = {
   text: string;
-  voice: string;
-  model: string;
 };
 
 export async function createKey(data: DataProps) {

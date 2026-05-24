@@ -73,7 +73,9 @@ const CreateDiaryPage = () => {
     <div className="rounded-3xl border border-[#E5EDF8] bg-white p-4 shadow-lg shadow-[#E5EDF8]/50">
       <section>
         <div className="flex items-center justify-between gap-3 px-2 pb-2">
-          <SectionHeading className="px-0 pb-0">🌤️ How was your day?</SectionHeading>
+          <SectionHeading className="px-0 pb-0">
+            🌤️ How was your day?
+          </SectionHeading>
           <div className="shrink-0 [&_button]:h-9 [&_button]:rounded-xl [&_button]:px-4 [&_button]:font-semibold">
             <SaveDialog
               date={date}
@@ -90,7 +92,7 @@ const CreateDiaryPage = () => {
         <section className="mt-4">
           <SectionHeading>Revised Diary</SectionHeading>
           <div className={contentPanelClass}>
-            <div className="space-y-3 animate-pulse">
+            <div className="animate-pulse space-y-3">
               <Skeleton className="h-4 w-3/4 bg-blue-100/80" />
               <Skeleton className="h-4 w-full bg-blue-100/80" />
               <Skeleton className="h-4 w-5/6 bg-blue-100/80" />
@@ -103,7 +105,9 @@ const CreateDiaryPage = () => {
           <section className="mt-4">
             <SectionHeading>✨ Revised Diary</SectionHeading>
             <div className={cn(contentPanelClass, "leading-relaxed")}>
-              <p className="bg-white rounded-md px-3 py-2">{revisedDiaryValue}</p>
+              <p className="rounded-md bg-white px-3 py-2">
+                {revisedDiaryValue}
+              </p>
             </div>
           </section>
         )

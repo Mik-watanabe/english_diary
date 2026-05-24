@@ -1,10 +1,7 @@
 import React from "react";
 import { notFound, redirect } from "next/navigation";
-import moment from "moment";
-import {
-  getUserDiary,
-  type GetUserDiaryErrorCode,
-} from "@/app/actions/diary/read-action";
+import { getUserDiary } from "@/app/actions/diary/read-action";
+import type { GetUserDiaryErrorCode } from "@/types/diary";
 import { highlightDiff } from "@/lib/diaryHighlight";
 import TextSpeechButton from "@/app/ui/diary/text-speech-button";
 import { cn } from "@/lib/utils";
@@ -21,8 +18,6 @@ const logGetUserDiaryFailure = (
   console.error("[getUserDiary]", code, message);
 };
 
-const editorWrapperClass =
-  "[&_textarea]:rounded-xl [&_textarea]:border-[#E5EDF8] [&_textarea]:bg-[#F5F9FF]/30 [&_textarea]:p-3 [&_textarea]:text-slate-700 [&_textarea]:placeholder:text-slate-400 [&_textarea]:focus:border-blue-300 [&_textarea]:focus:outline-none [&_textarea]:focus:ring-2 [&_textarea]:focus:ring-blue-200/80";
 const contentPanelClass =
   "rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/40 p-3 text-slate-700";
 
@@ -44,7 +39,6 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
       redirect("/login");
     }
     if (code === "diary_not_found") {
-  
     } else {
       logGetUserDiaryFailure(code, message);
       notFound();
@@ -78,11 +72,11 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         </div>
         {!isEmpty && (
           <SectionHeading className="px-0 py-6 text-center text-xl font-semibold">
-            Title: {diary.title}
+            Title: {diary?.title}
           </SectionHeading>
         )}
       </section>
-      {isEmpty? (
+      {isEmpty ? (
         <DiaryEmptyState date={date.format("YYYY-MM-DD")} />
       ) : (
         <>
@@ -96,17 +90,18 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 rows={5}
                 name="diary"
                 id="diary"
-                value={diary.original}
-                className="border border-gray-300 p-2 rounded-xl w-full focus-within:outline-none mt-2"
+                value={diary?.original}
+                className="mt-2 w-full rounded-xl border border-gray-300 p-2 focus-within:outline-none"
               />
             </div>
           </section>
           <section className="mt-4">
             <SectionHeading>
-              ✨ Revised Diary <TextSpeechButton revisedText={diary.revised} />
+              ✨ Revised Diary{" "}
+              <TextSpeechButton revisedText={diary?.revised || ""} />
             </SectionHeading>
             <div className={cn(contentPanelClass, "leading-relaxed")}>
-              <p className="bg-white rounded-md px-3 py-2">
+              <p className="rounded-md bg-white px-3 py-2">
                 {revisedWithHighlight}
               </p>
             </div>
@@ -114,7 +109,10 @@ const DiaryPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           <section className="mt-4">
             <SectionHeading>💡 AI Feedback</SectionHeading>
             <div className="rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/30 p-2">
-              <DiaryTabs corrections={diary.corrections} alternative={diary.alternative} />
+              <DiaryTabs
+                corrections={diary?.corrections || []}
+                alternative={diary?.alternative || ""}
+              />
             </div>
           </section>
         </>

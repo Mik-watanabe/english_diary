@@ -38,7 +38,6 @@ export default function SaveDiaryDialog({
 }: SaveDiaryDialogProps) {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [state, formAction, isPending] = useActionState(
     saveDiary,
     initialState,
@@ -48,22 +47,21 @@ export default function SaveDiaryDialog({
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
-      router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       showSuccessToast("Diary saved!");
+      router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       return;
     }
     showErrorToast(state.message);
     setOpen(false);
     setTitle("");
     return;
-  }, [state]);
+  }, [state, router, date]);
 
-  useEffect(() => {
-    const words = title.trim();
-    setIsButtonDisabled(words.length < 1 || words.length > 50);
-  }, [title]);
+  const isButtonDisabled =
+    title.trim().length < 1 || title.trim().length > 50 || isPending;
 
   return (
     <Dialog
@@ -84,11 +82,12 @@ export default function SaveDiaryDialog({
               "font-semibold shadow-sm",
               !revisedDiaryResponse
                 ? "cursor-not-allowed border-[#E5EDF8] bg-slate-50 text-slate-400 hover:bg-slate-50 hover:text-slate-400"
-                : "border-blue-500 bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 hover:cursor-pointer",
+                : "border-blue-500 bg-white text-blue-600 hover:cursor-pointer hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700",
             )}
             disabled={!revisedDiaryResponse}
           >
-            <Save />Save Diary
+            <Save />
+            Save Diary
           </Button>
         }
       />
@@ -105,7 +104,7 @@ export default function SaveDiaryDialog({
             placeholder="Max 50 characters"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="text-xs my-4 focus-visible:ring-blue-300/80 focus-visible:ring-2 focus-visible:border-blue-300"
+            className="my-4 text-xs focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-300/80"
           />
           <input type="hidden" name="date" value={date} />
           <input
@@ -144,13 +143,13 @@ export default function SaveDiaryDialog({
             />
             <Button
               type="submit"
-              disabled={isPending || isButtonDisabled}
-              className="border-blue-500 bg-blue-500 font-semibold text-white hover:bg-blue-600 hover:cursor-pointer hover:text-white"
+              disabled={isButtonDisabled}
+              className="border-blue-500 bg-blue-500 font-semibold text-white hover:cursor-pointer hover:bg-blue-600 hover:text-white"
             >
               {isPending ? (
                 <Spinner
                   data-icon="inline-start"
-                  className="inline-block mr-2"
+                  className="mr-2 inline-block"
                 />
               ) : (
                 <></>
