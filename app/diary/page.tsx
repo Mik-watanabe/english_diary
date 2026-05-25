@@ -11,7 +11,6 @@ export default function CalendarPage() {
         <ProfileButton />
       </DiaryHeader>
       <main className="mx-auto w-full max-w-4xl px-4 py-8 pb-16">
-        {/* TODO: Add Toaster */}
         <DiaryCalendar />
         <p className="mt-2 text-xs text-gray-500">
           <PencilLine className="mr-1 inline-block size-3" />

@@ -12,6 +12,9 @@ import moment from "moment";
 import { DiaryEvent } from "@/types/diary";
 import { getUserDiaryTitleByMonth } from "@/app/actions/diary/read-action";
 import { useRouter, useSearchParams } from "next/navigation";
+import { CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { parseDiaryDate } from "@/lib/date";
 
 const localizer = momentLocalizer(moment);
 
@@ -31,31 +34,12 @@ export default function DiaryCalendar() {
   const searchParams = useSearchParams();
   const monthParam = searchParams.get("month");
   const initialMonth =
-    monthParam && moment(monthParam, "YYYY-MM", true).isValid()
-      ? moment(monthParam, "YYYY-MM").toDate()
-      : new Date();
+    parseDiaryDate(monthParam, "YYYY-MM")?.toDate() || new Date();
 
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [month, setMonth] = useState<Date>(initialMonth);
   const [events, setEvents] = useState<DiaryEvent[]>([]);
-
-  //   const fetchEvents = async (targetDate: Date) => {
-  //     const from = moment(targetDate)
-  //       .startOf("month")
-  //       .startOf("week")
-  //       .format("YYYY-MM-DD");
-  //     const to = moment(targetDate)
-  //       .endOf("month")
-  //       .endOf("week")
-  //       .format("YYYY-MM-DD");
-
-  //     const result = await getUserDiaryTitleByMonth(from, to);
-  //     if (result.success) {
-  //       setEvents(result.diaryData);
-  //     } else {
-  //       console.error(result.message);
-  //     }
-  //   };
 
   const fetchEvents = async (targetDate: Date): Promise<DiaryEvent[]> => {
     const from = moment(targetDate)
@@ -75,14 +59,19 @@ export default function DiaryCalendar() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    async function loadEvents() {
+      setIsLoading(true);
       try {
         const nextEvents = await fetchEvents(month);
         if (!cancelled) setEvents(nextEvents);
       } catch (error) {
         if (!cancelled) console.error(error);
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
-    })();
+    }
+
+    loadEvents();
     return () => {
       cancelled = true;
     };
@@ -106,6 +95,21 @@ export default function DiaryCalendar() {
     setMonth(date);
     router.replace(`/diary?month=${moment(date).format("YYYY-MM")}`);
   };
+
+  if (isLoading) {
+    return (
+      <div>
+        <CardHeader className="mb-8 flex animate-pulse flex-col items-center justify-between gap-2 px-0 md:mb-4 md:flex-row">
+          <Skeleton className="h-5 w-2/4 md:w-1/4" />
+          <Skeleton className="h-5 w-2/4 md:w-1/6" />
+        </CardHeader>
+
+        <CardContent className="animate-pulse p-0">
+          <Skeleton className="h-[400px] w-full md:h-[450px]" />
+        </CardContent>
+      </div>
+    );
+  }
 
   return (
     <div className="diary-calendar">
