@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { parseDiaryDate } from "@/lib/date";
+import { showErrorToast } from "@/lib/show-toast";
 
 const localizer = momentLocalizer(moment);
 
@@ -66,6 +67,7 @@ export default function DiaryCalendar() {
         if (!cancelled) setEvents(nextEvents);
       } catch (error) {
         if (!cancelled) console.error(error);
+        showErrorToast((error as Error).message);
       } finally {
         if (!cancelled) setIsLoading(false);
       }
