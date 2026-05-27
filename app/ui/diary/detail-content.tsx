@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { DiaryTabs } from "./tabs";
 import { DiaryEmptyState } from "./diary-empty-state";
 import { getUserDiary } from "@/app/actions/diary/read-action";
-import { highlightDiff } from "@/lib/diaryHighlight";
+import { highlightDiff } from "@/lib/diary/diaryHighlight";
 import type { GetUserDiaryErrorCode } from "@/types/diary";
 import { notFound } from "next/navigation";
 

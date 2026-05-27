@@ -21,6 +21,7 @@ import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Save } from "lucide-react";
+import { eventCache } from "@/lib/diary/event-cache";
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
   date: string;
@@ -50,6 +51,7 @@ export default function SaveDiaryDialog({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
+      eventCache.delete(moment(date).format("YYYY-MM"));
       showSuccessToast("Diary saved!");
       router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
       return;

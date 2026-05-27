@@ -2,7 +2,7 @@
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Calendar,
   momentLocalizer,
@@ -16,6 +16,7 @@ import { CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { parseDiaryDate } from "@/lib/date";
 import { showErrorToast } from "@/lib/show-toast";
+import { eventCache } from "@/lib/diary/event-cache";
 
 const localizer = momentLocalizer(moment);
 
@@ -33,6 +34,8 @@ const eventPropGetter: EventPropGetter<DiaryEvent> = () => ({
 
 export default function DiaryCalendar() {
   const searchParams = useSearchParams();
+  const eventCacheRef = useRef(eventCache);
+
   const monthParam = searchParams.get("month");
   const initialMonth =
     parseDiaryDate(monthParam, "YYYY-MM")?.toDate() || new Date();
@@ -61,10 +64,23 @@ export default function DiaryCalendar() {
   useEffect(() => {
     let cancelled = false;
     async function loadEvents() {
-      setIsLoading(true);
+      const monthKey = moment(month).format("YYYY-MM");
+      const cachedEvents = eventCacheRef.current.get(monthKey);
+      if (cachedEvents) {
+        console.log("there is cached events", cachedEvents);
+        setEvents(cachedEvents);
+        return;
+      }
+
       try {
+        setIsLoading(true);
         const nextEvents = await fetchEvents(month);
-        if (!cancelled) setEvents(nextEvents);
+        if (!cancelled) {
+          console.log("setting cached events", nextEvents);
+          console.log("eventCacheRef.current", eventCacheRef.current);
+          eventCacheRef.current.set(monthKey, nextEvents);
+          setEvents(nextEvents);
+        }
       } catch (error) {
         if (!cancelled) console.error(error);
         showErrorToast((error as Error).message);
@@ -83,7 +99,6 @@ export default function DiaryCalendar() {
     const exists = events.some(
       (event) => event.start.toDateString() == start.toDateString(),
     );
-
     if (exists) {
       return;
     }

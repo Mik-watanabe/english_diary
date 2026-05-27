@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { MessageCircleWarning } from "lucide-react";
 
 const MAX_WORDS = 125;
-
 const DiaryEditor = ({
   handleRevise,
   loading,

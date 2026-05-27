@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import { parseDiaryDate } from "@/lib/date";
-import { highlightDiff } from "@/lib/diaryHighlight";
+import { highlightDiff } from "@/lib/diary/diaryHighlight";
 import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
