@@ -25,7 +25,7 @@ const DiaryEditor = ({
     setWordCount(words.length);
 
     if (error) {
-      if (wordCount <= MAX_WORDS && wordCount >= 5) {
+      if (words.length <= MAX_WORDS && words.length >= 5) {
         setError("");
         return;
       }

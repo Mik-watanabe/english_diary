@@ -2,7 +2,7 @@
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   momentLocalizer,
@@ -34,7 +34,6 @@ const eventPropGetter: EventPropGetter<DiaryEvent> = () => ({
 
 export default function DiaryCalendar() {
   const searchParams = useSearchParams();
-  const eventCacheRef = useRef(eventCache);
 
   const monthParam = searchParams.get("month");
   const initialMonth =
@@ -65,10 +64,10 @@ export default function DiaryCalendar() {
     let cancelled = false;
     async function loadEvents() {
       const monthKey = moment(month).format("YYYY-MM");
-      const cachedEvents = eventCacheRef.current.get(monthKey);
+      const cachedEvents = eventCache.get(monthKey);
       if (cachedEvents) {
-        console.log("there is cached events", cachedEvents);
         setEvents(cachedEvents);
+        setIsLoading(false);
         return;
       }
 
@@ -76,9 +75,7 @@ export default function DiaryCalendar() {
         setIsLoading(true);
         const nextEvents = await fetchEvents(month);
         if (!cancelled) {
-          console.log("setting cached events", nextEvents);
-          console.log("eventCacheRef.current", eventCacheRef.current);
-          eventCacheRef.current.set(monthKey, nextEvents);
+          eventCache.set(moment(month).format("YYYY-MM"), nextEvents);
           setEvents(nextEvents);
         }
       } catch (error) {
@@ -97,7 +94,9 @@ export default function DiaryCalendar() {
 
   const handleSelectSlot = ({ start }: { start: Date }) => {
     const exists = events.some(
-      (event) => event.start.toDateString() == start.toDateString(),
+      (event) =>
+        moment(event.start).format("YYYY-MM-DD") ===
+        moment(start).format("YYYY-MM-DD"),
     );
     if (exists) {
       return;
@@ -109,6 +108,10 @@ export default function DiaryCalendar() {
     router.push(`/diary/${moment(event.start).format("YYYY-MM-DD")}`);
   };
   const handleNavigate = (date: Date) => {
+    const currentKey = moment(month).format("YYYY-MM");
+    const nextKey = moment(date).format("YYYY-MM");
+    if (currentKey == nextKey) return;
+
     setMonth(date);
     router.replace(`/diary?month=${moment(date).format("YYYY-MM")}`);
   };
