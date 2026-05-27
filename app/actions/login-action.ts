@@ -40,5 +40,5 @@ export async function login(initialState: any, formData: FormData) {
     };
   }
 
-  redirect("/calendar");
+  redirect("/diary");
 }
