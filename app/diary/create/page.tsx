@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import { parseDiaryDate } from "@/lib/date";
-import { highlightDiff } from "@/lib/diaryHighlight";
+import { highlightDiff } from "@/lib/diary/diaryHighlight";
 import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,7 +31,6 @@ const CreateDiaryPage = () => {
   if (!parsedDate) {
     notFound();
   }
-  const date = parsedDate.format("MMM DD, YYYY");
 
   const handleRevise = async (diaryValue: string) => {
     if (!diaryValue.trim()) return;
@@ -78,7 +77,7 @@ const CreateDiaryPage = () => {
           </SectionHeading>
           <div className="shrink-0 [&_button]:h-9 [&_button]:rounded-xl [&_button]:px-4 [&_button]:font-semibold">
             <SaveDialog
-              date={date}
+              date={parsedDate}
               revisedDiaryResponse={revisedDiaryResponse}
             />
           </div>

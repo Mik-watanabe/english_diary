@@ -21,9 +21,10 @@ import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Save } from "lucide-react";
+import { eventCache } from "@/lib/diary/event-cache";
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
-  date: string;
+  date: moment.Moment;
 };
 
 const initialState = {
@@ -50,8 +51,9 @@ export default function SaveDiaryDialog({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
+      eventCache.delete(date.format("YYYY-MM"));
       showSuccessToast("Diary saved!");
-      router.push(`/diary/${moment(date).format("YYYY-MM-DD")}`);
+      router.push(`/diary/${date.format("YYYY-MM-DD")}`);
       return;
     }
     showErrorToast(state.message);
@@ -106,7 +108,7 @@ export default function SaveDiaryDialog({
             onChange={(e) => setTitle(e.target.value)}
             className="my-4 text-xs focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-300/80"
           />
-          <input type="hidden" name="date" value={date} />
+          <input type="hidden" name="date" value={date.format("YYYY-MM-DD")} />
           <input
             type="hidden"
             name="original_content"

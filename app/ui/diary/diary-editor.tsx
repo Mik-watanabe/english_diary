@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { MessageCircleWarning } from "lucide-react";
 
 const MAX_WORDS = 125;
-
 const DiaryEditor = ({
   handleRevise,
   loading,
@@ -26,7 +25,7 @@ const DiaryEditor = ({
     setWordCount(words.length);
 
     if (error) {
-      if (wordCount <= MAX_WORDS && wordCount >= 5) {
+      if (words.length <= MAX_WORDS && words.length >= 5) {
         setError("");
         return;
       }
