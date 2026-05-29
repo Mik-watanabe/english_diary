@@ -1,4 +1,4 @@
-import { SectionHeading } from "./section-heading";
+import SectionHeading from "./section-heading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
