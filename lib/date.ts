@@ -5,7 +5,7 @@ export function parseDiaryDate(
   format = "YYYY-MM-DD",
 ): Moment | null {
   if (!rawDate) return null;
-
+  // Strictly validate the date format (YYYY-MM-DD) and return null if it is not valid
   const date = moment(rawDate, format, true);
 
   return date.isValid() ? date : null;
