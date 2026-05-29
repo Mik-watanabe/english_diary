@@ -12,8 +12,7 @@ import moment from "moment";
 import { DiaryEvent } from "@/types/diary";
 import { getUserDiaryTitleByMonth } from "@/app/actions/diary/read-action";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { parseDiaryDate } from "@/lib/date";
 import { showErrorToast } from "@/lib/show-toast";
 import { eventCache } from "@/lib/diary/event-cache";
@@ -73,14 +72,17 @@ export default function DiaryCalendar() {
 
       try {
         setIsLoading(true);
+        setEvents([]);
         const nextEvents = await fetchEvents(month);
         if (!cancelled) {
           eventCache.set(moment(month).format("YYYY-MM"), nextEvents);
           setEvents(nextEvents);
         }
       } catch (error) {
-        if (!cancelled) console.error(error);
-        showErrorToast((error as Error).message);
+        if (!cancelled) {
+          console.error(error);
+          showErrorToast((error as Error).message);
+        }
       } finally {
         if (!cancelled) setIsLoading(false);
       }
@@ -110,33 +112,18 @@ export default function DiaryCalendar() {
   const handleNavigate = (date: Date) => {
     const currentKey = moment(month).format("YYYY-MM");
     const nextKey = moment(date).format("YYYY-MM");
-    if (currentKey == nextKey) return;
+    if (currentKey === nextKey) return;
 
     setMonth(date);
-    router.replace(`/diary?month=${moment(date).format("YYYY-MM")}`);
+    router.replace(`/diary?month=${nextKey}`);
   };
 
-  if (isLoading) {
-    return (
-      <div>
-        <CardHeader className="mb-8 flex animate-pulse flex-col items-center justify-between gap-2 px-0 md:mb-4 md:flex-row">
-          <Skeleton className="h-5 w-2/4 md:w-1/4" />
-          <Skeleton className="h-5 w-2/4 md:w-1/6" />
-        </CardHeader>
-
-        <CardContent className="animate-pulse p-0">
-          <Skeleton className="h-[400px] w-full md:h-[450px]" />
-        </CardContent>
-      </div>
-    );
-  }
-
   return (
-    <div className="diary-calendar">
+    <div className="diary-calendar relative">
       <Calendar
         dayLayoutAlgorithm="no-overlap"
         localizer={localizer}
-        events={events}
+        events={isLoading ? [] : events}
         startAccessor="start"
         endAccessor="end"
         eventPropGetter={eventPropGetter}
@@ -148,6 +135,15 @@ export default function DiaryCalendar() {
         views={["month"]}
         date={month}
       />
+      {isLoading && (
+        <div
+          className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-white"
+          aria-busy="true"
+          aria-label="Loading calendar events"
+        >
+          <Spinner className="size-8 text-blue-500" />
+        </div>
+      )}
     </div>
   );
 }
