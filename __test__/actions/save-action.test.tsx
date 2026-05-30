@@ -1,4 +1,7 @@
-import { saveDiary } from "@/app/actions/diary/save-action";
+import {
+  saveDiary,
+  validateSaveDiaryFormData,
+} from "@/app/actions/diary/save-action";
 
 const { mockRpc } = vi.hoisted(() => ({
   mockRpc: vi.fn(),
@@ -47,49 +50,49 @@ describe("saveDiary", () => {
       { attr: "original_content" },
       { attr: "revised_content" },
       { attr: "alternative_content" },
-    ])("returns failure when $attr is empty", ({ attr }) => {
+    ])("returns failure when $attr is empty", async ({ attr }) => {
       const formData = new FormData();
 
       setCorrections(formData);
       setFormData(formData);
       formData.set(attr, "");
 
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
       expect(result.success).toBeFalsy();
     });
 
-    test("returns failure when title only contains whitespace", () => {
+    test("returns failure when title only contains whitespace", async () => {
       const formData = new FormData();
       setCorrections(formData);
       setFormData(formData);
       formData.set("title", "   ");
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
       expect(result.success).toBeFalsy();
     });
 
     test.for([{ date: "2026-01" }, { date: "2026" }, { date: "aaa" }])(
       "returns failure when date format is invalid",
-      ({ date }) => {
+      async ({ date }) => {
         const formData = new FormData();
         setCorrections(formData);
 
         setFormData(formData);
         formData.set("date", date);
 
-        const result = validateSaveDiaryFormData(formData);
+        const result = await validateSaveDiaryFormData(formData);
         expect(result.success).toBeFalsy();
       },
     );
 
-    test("returns failure when corrections are not JSON stringified", () => {
+    test("returns failure when corrections are not JSON stringified", async () => {
       const formData = new FormData();
       setFormData(formData);
       formData.set("corrections", "not a JSON string");
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
       expect(result.success).toBeFalsy();
     });
 
-    test("returns failure when corrections elements are not valid", () => {
+    test("returns failure when corrections elements are not valid", async () => {
       const formData = new FormData();
       setFormData(formData);
       //   missing why field
@@ -99,25 +102,25 @@ describe("saveDiary", () => {
           { original: "Test Original", revised: "Test Revised" },
         ]),
       );
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
       expect(result.success).toBeFalsy();
     });
 
-    test("returns success when corrections are empty", () => {
+    test("returns success when corrections are empty", async () => {
       const formData = new FormData();
       setFormData(formData);
 
       formData.set("corrections", JSON.stringify([]));
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
 
       expect(result.success).toBeTruthy();
     });
 
-    test("returns success when corrections are valid", () => {
+    test("returns success when corrections are valid", async () => {
       const formData = new FormData();
       setFormData(formData);
       setCorrections(formData);
-      const result = validateSaveDiaryFormData(formData);
+      const result = await validateSaveDiaryFormData(formData);
 
       expect(result.success).toBeTruthy();
     });

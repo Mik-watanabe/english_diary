@@ -33,8 +33,8 @@ const SaveDiarySchema = z.object({
   }),
 });
 
-function validateSaveDiaryFormData(formData: FormData) {
-  return SaveDiarySchema.safeParse({
+async function validateSaveDiaryFormData(formData: FormData) {
+  return await SaveDiarySchema.safeParse({
     title: formData.get("title"),
     date: formData.get("date"),
     original_content: formData.get("original_content"),
@@ -45,7 +45,7 @@ function validateSaveDiaryFormData(formData: FormData) {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function saveDiary(initialState: any, formData: FormData) {
-  const validatedFields = validateSaveDiaryFormData(formData);
+  const validatedFields = await validateSaveDiaryFormData(formData);
 
   if (!validatedFields.success) {
     return {
