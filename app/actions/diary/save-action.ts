@@ -11,12 +11,25 @@ const correctionsSchema = z.array(
   }),
 );
 
+const isValidDateString = (value: string) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+};
+
 const SaveDiarySchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  date: z.string(),
-  original_content: string().min(1),
-  revised_content: string().min(1),
-  alternative_content: string().min(1),
+  title: z.string().trim().min(1, "Title is required"),
+  date: z.string().trim().refine(isValidDateString, "Invalid date format"),
+  original_content: string().trim().min(1),
+  revised_content: string().trim().min(1),
+  alternative_content: string().trim().min(1),
   corrections: z.string().transform((value, ctx) => {
     try {
       return correctionsSchema.parse(JSON.parse(value));
@@ -30,9 +43,8 @@ const SaveDiarySchema = z.object({
   }),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function saveDiary(initialState: any, formData: FormData) {
-  const validatedFields = SaveDiarySchema.safeParse({
+async function validateSaveDiaryFormData(formData: FormData) {
+  return await SaveDiarySchema.safeParse({
     title: formData.get("title"),
     date: formData.get("date"),
     original_content: formData.get("original_content"),
@@ -40,6 +52,10 @@ export default async function saveDiary(initialState: any, formData: FormData) {
     corrections: formData.get("corrections"),
     alternative_content: formData.get("alternative_content"),
   });
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function saveDiary(initialState: any, formData: FormData) {
+  const validatedFields = await validateSaveDiaryFormData(formData);
 
   if (!validatedFields.success) {
     return {
@@ -73,3 +89,5 @@ export default async function saveDiary(initialState: any, formData: FormData) {
     diaryId: data,
   };
 }
+
+export { validateSaveDiaryFormData, saveDiary };

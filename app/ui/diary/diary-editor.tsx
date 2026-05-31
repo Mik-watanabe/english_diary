@@ -7,14 +7,14 @@ import { Sparkle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MessageCircleWarning } from "lucide-react";
 
-const MAX_WORDS = 125;
-const DiaryEditor = ({
+export const MAX_WORDS = 125;
+export default function DiaryEditor({
   handleRevise,
   loading,
 }: {
   handleRevise: (diaryValue: string) => void;
   loading: boolean;
-}) => {
+}) {
   const [diaryValue, setDiaryValue] = useState("");
   const [error, setError] = useState("");
   const [wordCount, setWordCount] = useState(0);
@@ -94,6 +94,4 @@ const DiaryEditor = ({
       </div>
     </>
   );
-};
-
-export default DiaryEditor;
+}

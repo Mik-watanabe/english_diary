@@ -1,7 +1,7 @@
-import { SectionHeading } from "./section-heading";
+import SectionHeading from "./section-heading";
 import TextSpeechButton from "./text-speech-button";
 import { cn } from "@/lib/utils";
-import { DiaryTabs } from "./tabs";
+import DiaryTabs from "./tabs";
 import { DiaryEmptyState } from "./diary-empty-state";
 import { getUserDiary } from "@/app/actions/diary/read-action";
 import { highlightDiff } from "@/lib/diary/diaryHighlight";

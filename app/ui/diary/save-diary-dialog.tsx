@@ -15,7 +15,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { RevisedDiaryResponse } from "@/types/diary";
 
 import { useActionState } from "react";
-import saveDiary from "@/app/actions/diary/save-action";
+import { saveDiary } from "@/app/actions/diary/save-action";
 import moment from "moment";
 import { showErrorToast, showSuccessToast } from "@/lib/show-toast";
 import { useRouter } from "next/navigation";

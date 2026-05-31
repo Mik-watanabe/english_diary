@@ -16,7 +16,10 @@ type DiaryTabsProps = {
   alternative: string;
 };
 
-export function DiaryTabs({ corrections = [], alternative }: DiaryTabsProps) {
+export default function DiaryTabs({
+  corrections = [],
+  alternative,
+}: DiaryTabsProps) {
   const isCorrectionsEmpty = corrections?.length === 0;
   const defaultTab = isCorrectionsEmpty ? "alternative" : "corrections";
   return (

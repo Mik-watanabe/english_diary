@@ -3,15 +3,14 @@ import React, { useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import { parseDiaryDate } from "@/lib/date";
 import { highlightDiff } from "@/lib/diary/diaryHighlight";
-import { Correction } from "../types";
 import DiaryEditor from "@/app/ui/diary/diary-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 import SaveDialog from "@/app/ui/diary/save-diary-dialog";
-import { RevisedDiaryResponse } from "@/types/diary";
+import { RevisedDiaryResponse, Correction } from "@/types/diary";
 import { showErrorToast } from "@/lib/show-toast";
-import { DiaryTabs } from "@/app/ui/diary/tabs";
+import DiaryTabs from "@/app/ui/diary/tabs";
 import { cn } from "@/lib/utils";
-import { SectionHeading } from "@/app/ui/diary/section-heading";
+import SectionHeading from "@/app/ui/diary/section-heading";
 
 const contentPanelClass =
   "rounded-xl border border-[#E5EDF8] bg-[#F5F9FF]/40 p-3 text-slate-700";
@@ -100,6 +99,7 @@ const CreateDiaryPage = () => {
           </div>
         </section>
       ) : (
+        // TODO: make this to a shared component (same as DetailContent)
         revisedDiaryValue.length > 0 && (
           <section className="mt-4">
             <SectionHeading>✨ Revised Diary</SectionHeading>

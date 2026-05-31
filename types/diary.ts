@@ -14,7 +14,6 @@ export type Correction = {
 };
 
 export type RevisedDiaryResponse = {
-  title: string;
   original: string;
   revised: string;
   corrections: Correction[];
