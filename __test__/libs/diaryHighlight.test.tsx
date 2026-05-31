@@ -37,7 +37,7 @@ describe("diaryHighlight", () => {
       );
 
       expect(container.querySelector("mark")).toHaveTextContent("exciting");
-      expect(container.querySelector("span")).toBeDefined();
+      expect(container.querySelector("span")).not.toBeNull();
     });
 
     test("renders unchanged text in <span> without <mark>", () => {
@@ -45,7 +45,7 @@ describe("diaryHighlight", () => {
         <>{highlightDiff("it was excited", "it was excited")}</>,
       );
 
-      expect(container.querySelector("span")).toBeDefined();
+      expect(container.querySelector("span")).not.toBeNull();
 
       expect(container.querySelector("mark")).toBeNull();
     });

@@ -65,7 +65,7 @@ describe("SaveDiaryDialog", () => {
       expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
     });
 
-    test("disables Save buttonwhen title is whitespace only", () => {
+    test("disables Save button when title is whitespace only", () => {
       fireEvent.change(screen.getByRole("textbox"), {
         target: { value: "   " },
       });

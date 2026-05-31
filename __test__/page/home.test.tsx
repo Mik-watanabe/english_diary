@@ -6,7 +6,7 @@ vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
 }));
 
-describe("Home tests    ", () => {
+describe("Home tests", () => {
   test("should redirect to /diary", () => {
     Home();
     expect(redirect).toHaveBeenCalledWith("/diary");
