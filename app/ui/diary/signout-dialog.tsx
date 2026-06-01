@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { signOut } from "@/app/actions/signout-action";
 import { toast } from "sonner";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export default function SignoutDialog({
   isOpen,
@@ -22,6 +23,10 @@ export default function SignoutDialog({
       onSetOpen(false);
     } catch (error) {
       console.error(error);
+      if (isRedirectError(error)) {
+        // ignore redirect error and continue with the redirect
+        return;
+      }
       toast.error("Failed to sign out");
     }
   };
