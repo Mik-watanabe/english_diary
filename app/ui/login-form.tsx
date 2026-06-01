@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { login, loginWithDemo } from "@/app/actions/login-action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import {
   authPrimaryButtonClass,
   authTextLinkClass,
 } from "@/app/ui/auth/auth-shell";
+import { cn } from "@/lib/utils";
 
 const initialState = {
   success: false,
@@ -27,15 +29,22 @@ const initialState = {
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(login, initialState);
+  const [isDemoLoading, setIsDemoLoading] = useState(false);
 
   const handleTryDemo = async () => {
-    // For demo login, clear the cache before signing in.
-    // Non-sample demo rows are deleted on login, so without clearing the cache,
-    // deleted demo entries can still appear on the calendar.
-    clearEventCache();
-    const result = await loginWithDemo();
-    if (result && !result.success) {
-      showErrorToast(result.message);
+    setIsDemoLoading(true);
+
+    try {
+      clearEventCache();
+      const result = await loginWithDemo();
+      if (result && !result.success) {
+        showErrorToast(result.message);
+      }
+    } catch (error) {
+      unstable_rethrow(error);
+      showErrorToast("Failed to try demo");
+    } finally {
+      setIsDemoLoading(false);
     }
   };
 
@@ -54,7 +63,12 @@ export default function LoginForm() {
             <button
               type="button"
               onClick={handleTryDemo}
-              className={authTextLinkClass}
+              disabled={isDemoLoading}
+              aria-busy={isDemoLoading}
+              className={cn(
+                authTextLinkClass,
+                isDemoLoading && "pointer-events-none opacity-60",
+              )}
             >
               Try Demo
             </button>

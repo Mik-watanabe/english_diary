@@ -2,10 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export const authPrimaryButtonClass =
-  "text-md w-full rounded-full border-blue-500 bg-blue-500 py-5 font-semibold text-white hover:cursor-pointer hover:bg-blue-600";
-
-export const authSecondaryButtonClass =
-  "text-md flex w-full items-center justify-center rounded-full border border-gray-300 bg-white py-5 font-semibold text-black hover:cursor-pointer hover:bg-gray-200";
+  "w-full rounded-full border-blue-500 bg-blue-500 py-5 font-semibold text-white hover:cursor-pointer hover:bg-blue-600";
 
 /** Matches diary-editor focus/border styling */
 export const authInputClass =
