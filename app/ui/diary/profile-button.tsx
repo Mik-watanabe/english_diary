@@ -45,7 +45,7 @@ export function ProfileButton() {
             }}
           >
             <LogOutIcon />
-            Log out
+            Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
