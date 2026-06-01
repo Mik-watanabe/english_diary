@@ -17,6 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { parseDiaryDate } from "@/lib/date";
 import { showErrorToast } from "@/lib/show-toast";
 import { eventCache } from "@/lib/diary/event-cache";
+import { diaryCalendarEntriesToEvents } from "@/lib/diary/calendar-events";
 
 const localizer = momentLocalizer(moment);
 
@@ -58,7 +59,7 @@ export default function DiaryCalendar() {
     if (!result.success) {
       throw new Error(result.message);
     }
-    return result.diaryData;
+    return diaryCalendarEntriesToEvents(result.diaryData);
   };
 
   useEffect(() => {
