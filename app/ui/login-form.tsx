@@ -1,13 +1,20 @@
 "use client";
 
 import { useActionState } from "react";
-import { login } from "@/app/actions/login-action";
+import { login, loginWithDemo } from "@/app/actions/login-action";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import Link from "next/link";
+import { showErrorToast } from "@/lib/show-toast";
+import { clearEventCache } from "@/lib/diary/event-cache";
+import {
+  AuthShell,
+  AuthTextFooter,
+  AuthTextLink,
+  authInputClass,
+  authPrimaryButtonClass,
+  authTextLinkClass,
+} from "@/app/ui/auth/auth-shell";
 
 const initialState = {
   success: false,
@@ -20,80 +27,83 @@ const initialState = {
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(login, initialState);
+
+  const handleTryDemo = async () => {
+    // For demo login, clear the cache before signing in.
+    // Non-sample demo rows are deleted on login, so without clearing the cache,
+    // deleted demo entries can still appear on the calendar.
+    clearEventCache();
+    const result = await loginWithDemo();
+    if (result && !result.success) {
+      showErrorToast(result.message);
+    }
+  };
+
   return (
-    <div className="flex min-h-dvh items-center justify-center">
-      <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-foreground dark:text-foreground mt-2 text-center text-lg font-bold text-balance">
-            Login to EnglishDiary
-          </h2>
-          {state.message && (
-            <p className="text-center text-sm text-red-500">{state.message}</p>
-          )}
-        </div>
+    <AuthShell
+      title="Login to EnglishDiary"
+      message={state.message || undefined}
+      footer={
+        <>
+          <AuthTextFooter>
+            Don&apos;t have an account?{" "}
+            <AuthTextLink href="/signup">Sign up</AuthTextLink>
+          </AuthTextFooter>
+          <AuthTextFooter>
+            Want to try EnglishDiary with a demo account?{" "}
+            <button
+              type="button"
+              onClick={handleTryDemo}
+              className={authTextLinkClass}
+            >
+              Try Demo
+            </button>
+          </AuthTextFooter>
+        </>
+      }
+    >
+      <form action={formAction} className="space-y-4">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="form-email">Email</FieldLabel>
+            <Input
+              id="form-email"
+              type="email"
+              placeholder="john@example.com"
+              name="email"
+              required
+              className={authInputClass}
+            />
+            {state.errors?.email && (
+              <p className="text-sm text-red-500">{state.errors.email[0]}</p>
+            )}
+          </Field>
 
-        <Card className="mt-4 shadow-2xs sm:mx-auto sm:w-full sm:max-w-md">
-          <CardContent>
-            <form action={formAction} className="space-y-4">
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="form-email">Email</FieldLabel>
-                  <Input
-                    id="form-email"
-                    type="email"
-                    placeholder="john@example.com"
-                    name="email"
-                    required
-                  />
-                  {state.errors?.email && (
-                    <p className="text-sm text-red-500">
-                      {state.errors.email[0]}
-                    </p>
-                  )}
-                </Field>
+          <Field>
+            <FieldLabel htmlFor="form-password">
+              Password{" "}
+              <span className="ml-auto text-xs text-blue-500 hover:cursor-pointer hover:underline">
+                Forgot password?
+              </span>
+            </FieldLabel>
+            <Input
+              id="form-password"
+              type="password"
+              placeholder="********"
+              name="password"
+              required
+              className={authInputClass}
+            />
+            {state.errors?.password && (
+              <p className="text-sm text-red-500">{state.errors.password[0]}</p>
+            )}
+          </Field>
+        </FieldGroup>
 
-                <Field>
-                  {/* TODO: Add forgot password link */}
-                  <FieldLabel htmlFor="form-password">
-                    Password{" "}
-                    <span className="ml-auto text-xs text-blue-500 hover:cursor-pointer hover:underline">
-                      Forgot password?
-                    </span>
-                  </FieldLabel>
-                  <Input
-                    id="form-password"
-                    type="password"
-                    placeholder="********"
-                    name="password"
-                    required
-                  />
-                  {state.errors?.password && (
-                    <p className="text-sm text-red-500">
-                      {state.errors.password[0]}
-                    </p>
-                  )}
-                </Field>
-              </FieldGroup>
-
-              <Button
-                type="submit"
-                className="mt-4 w-full py-2 font-medium hover:cursor-pointer hover:opacity-80"
-              >
-                Login
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-        <p className="text-muted-foreground dark:text-muted-foreground mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90 font-medium"
-          >
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+        <Button type="submit" className={authPrimaryButtonClass}>
+          Login
+        </Button>
+      </form>
+    </AuthShell>
   );
 }
