@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Save } from "lucide-react";
 import { eventCache } from "@/lib/diary/event-cache";
+import { useUser } from "@/components/providers/UserProvider";
 type SaveDiaryDialogProps = {
   revisedDiaryResponse: RevisedDiaryResponse | null;
   date: moment.Moment;
@@ -44,14 +45,14 @@ export default function SaveDiaryDialog({
     initialState,
   );
   const [open, setOpen] = useState(false);
-
+  const { user } = useUser();
   useEffect(() => {
     if (!state?.message) return;
     if (state.success) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(false);
       setTitle("");
-      eventCache.delete(date.format("YYYY-MM"));
+      eventCache.delete(`${date.format("YYYY-MM")}-${user?.id}`);
       showSuccessToast("Diary saved!");
       router.push(`/diary/${date.format("YYYY-MM-DD")}`);
       return;
@@ -60,7 +61,7 @@ export default function SaveDiaryDialog({
     setOpen(false);
     setTitle("");
     return;
-  }, [state, router, date]);
+  }, [state, router, date, user?.id]);
 
   const isButtonDisabled =
     title.trim().length < 1 || title.trim().length > 50 || isPending;

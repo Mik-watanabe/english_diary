@@ -3,6 +3,7 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
 import { useState, useEffect } from "react";
+import { useUser } from "@/components/providers/UserProvider";
 import {
   Calendar,
   momentLocalizer,
@@ -32,6 +33,7 @@ const eventPropGetter: EventPropGetter<DiaryEvent> = () => ({
 });
 
 export default function DiaryCalendar() {
+  const { user } = useUser();
   const searchParams = useSearchParams();
 
   const monthParam = searchParams.get("month");
@@ -62,7 +64,7 @@ export default function DiaryCalendar() {
   useEffect(() => {
     let cancelled = false;
     async function loadEvents() {
-      const monthKey = moment(month).format("YYYY-MM");
+      const monthKey = `${moment(month).format("YYYY-MM")}-${user?.id}`;
       const cachedEvents = eventCache.get(monthKey);
       if (cachedEvents) {
         setEvents(cachedEvents);
@@ -75,7 +77,7 @@ export default function DiaryCalendar() {
         setEvents([]);
         const nextEvents = await fetchEvents(month);
         if (!cancelled) {
-          eventCache.set(moment(month).format("YYYY-MM"), nextEvents);
+          eventCache.set(monthKey, nextEvents);
           setEvents(nextEvents);
         }
       } catch (error) {
@@ -92,7 +94,7 @@ export default function DiaryCalendar() {
     return () => {
       cancelled = true;
     };
-  }, [month]);
+  }, [month, user?.id]);
 
   const handleSelectSlot = ({ start }: { start: Date }) => {
     const exists = events.some(
