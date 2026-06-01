@@ -46,9 +46,15 @@ export type GetUserDiaryTitleByMonthResult =
   | SuccessGetUserDiaryTitleByMonthResult
   | ErrorGetUserDiaryTitleByMonthResult;
 
+/** Server response: date-only strings (no Date) to avoid UTC shifts in Server Actions. */
+export type DiaryCalendarEntry = {
+  title: string;
+  diaryDate: string;
+};
+
 export type SuccessGetUserDiaryTitleByMonthResult = {
   success: true;
-  diaryData: DiaryEvent[];
+  diaryData: DiaryCalendarEntry[];
 };
 
 export type ErrorGetUserDiaryTitleByMonthResult = {
