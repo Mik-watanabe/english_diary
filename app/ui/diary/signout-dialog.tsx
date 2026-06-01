@@ -7,7 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { signOut } from "@/app/actions/signout-action";
-import { toast } from "sonner";
+import { unstable_rethrow } from "next/navigation";
+import { showErrorToast } from "@/lib/show-toast";
 
 export default function SignoutDialog({
   isOpen,
@@ -21,8 +22,9 @@ export default function SignoutDialog({
       await signOut();
       onSetOpen(false);
     } catch (error) {
+      unstable_rethrow(error);
       console.error(error);
-      toast.error("Failed to sign out");
+      showErrorToast("Failed to sign out");
     }
   };
   return (

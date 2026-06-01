@@ -2,8 +2,16 @@ import SaveDiaryDialog from "@/app/ui/diary/save-diary-dialog";
 import { RevisedDiaryResponse } from "@/types/diary";
 import { fireEvent, render, RenderResult } from "@testing-library/react";
 import moment from "moment";
+
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
+}));
+
+vi.mock("@/components/providers/UserProvider", () => ({
+  useUser: () => ({
+    user: { id: "test-user-id" },
+    setUser: vi.fn(),
+  }),
 }));
 
 const revisedDiaryResponse: RevisedDiaryResponse = {
